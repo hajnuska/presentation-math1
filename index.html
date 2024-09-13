@@ -30,6 +30,16 @@
             margin: 20px;
         }
 
+        .button-container {
+            font-size: 16px; /* Eredeti szöveg mérete */
+            line-height: 1.5; /* Sortáv az eredeti szöveghez */
+            display: flex; /* Flexbox beállítás */
+            align-items: center; /* Vertikális középre igazítás */
+            justify-content: center; /* Horizontális középre igazítás */
+            height: 100px; /* Gomb magassága */
+            border: 1px solid black; /* Csak a vizualizációhoz */
+        }
+        
         .button {
             background-color: pink;
             border: none;
@@ -53,12 +63,8 @@
             cursor: not-allowed;
         }*/
 
-        .small-text {
-            font-size: 12px;
-            font-weight: normal;
-            vertical-align: middle; /* Kiemelt szöveg középre igazítása */
-            display: inline-block; /* Inline block, hogy a vertical-align működjön */
-            line-height: 1.5; /* Azonos sor magasság, mint az eredeti szöveg */
+        .highlighted-text {
+            font-size: 12.8px; /* Kisebb betűméret a kiemelt szöveghez */
         }
 
         .thumbnails {
@@ -95,11 +101,11 @@
         <button id="previousImage" class="button">Previous</button>
         <button id="pause" class="button">Pause</button>
         <button id="resume" class="button">
-            <span class="small-text">Resume</span> Play
+            <span class="highlighted-text">Resume</span> Play
         </button>
         <button id="nextImage" class="button">Next</button>
         <button id="reset" class="button">
-            <span class="small-text">Restart</span> Start
+            <span class="highlighted-text">Restart</span> Start
         </button>
         <button id="home" class="button">Kezdőlap</button>
     </div>
