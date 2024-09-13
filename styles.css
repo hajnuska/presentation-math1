@@ -39,10 +39,10 @@ body {
     transition: transform 0.2s;
 }
 
-.button.disabled {
+/*.button.disabled {
     background-color: lightgray;
     cursor: not-allowed;
-}
+}*/
 
 .thumbnails {
     display: flex;
