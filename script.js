@@ -1,39 +1,9 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
-// A képek és szövegek betöltése
-async function loadSlides() {
-    try {
-        const response = await fetch('slides-data.csv'); // CSV fájl elérési útja
-        if (!response.ok) {
-            throw new Error(`Hiba a CSV fájl betöltésekor: ${response.statusText}`);
-        }
-        const text = await response.text();
-        const lines = text.split('\n');
-
-        // Ellenőrzés, hogy van-e adat
-        if (lines.length <= 1) {
-            console.error('A CSV fájl üres vagy nem tartalmaz adatokat.');
-            return [];
-        }
-
-        return lines.slice(1).map(line => {
-            const [index, src, text] = line.split(',');
-            return {
-                src: `https://github.com/hajnus/presentation-with-image-text/raw/main/images/${src.trim()}`, // GitHub raw URL
-                text: text ? text.trim() : `Ez a(z) ${index} kép.`
-            };
-        });
-    } catch (error) {
-        console.error('Hiba történt a diák betöltése során:', error);
-        return [];
-    }
-}
-
-let images = [];
 let currentIndex = 0;
 let isPaused = false;
-let isSpeaking = false; // Azt jelzi, hogy a szöveg felolvasása folyamatban van
-let currentUtterance = null; // Aktuális felolvasás tárolása
+let isSpeaking = false;
+let currentUtterance = null;
 
 const currentImage = document.getElementById('currentImage');
 const currentText = document.getElementById('currentText');
@@ -45,30 +15,42 @@ const nextButton = document.getElementById('nextImage');
 const previousButton = document.getElementById('previousImage');
 const homeButton = document.getElementById('home');
 
-// Induláskor a diák betöltése és az első kép megjelenítése
-loadSlides().then(loadedImages => {
-    images = loadedImages;
+// Képek és szövegek listája (CSV-ből beolvasva)
+let slides = [];
 
-    // Thumbnails generálása
-    images.forEach((image, index) => {
+// CSV beolvasás
+Papa.parse("data.csv", {
+    download: true,
+    header: true,
+    complete: function(results) {
+        slides = results.data.map(row => ({
+            src: `images/${row.src}`, // Képek az "images" mappából
+            text: row.text // Szöveg a CSV-ből
+        }));
+        generateThumbnails();
+        showSlide(0); // Első kép megjelenítése
+    }
+});
+
+// Thumbnails generálása
+function generateThumbnails() {
+    slides.forEach((slide, index) => {
         const thumb = document.createElement('img');
-        thumb.src = image.src;
+        thumb.src = slide.src;
         thumb.dataset.index = index; // Tároljuk az indexet a thumbnailen
         thumb.addEventListener('click', () => {
             handleNavigation(index);
         });
         thumbnailsContainer.appendChild(thumb);
     });
-
-    showSlide(0); // Első kép megjelenítése
-});
+}
 
 function updateThumbnails() {
     const thumbnails = document.querySelectorAll('.thumbnails img');
     thumbnails.forEach((thumb, index) => {
         thumb.classList.toggle('active', index === currentIndex);
     });
-    centerThumbnail(currentIndex); // Thumbnail sáv középre igazítása
+    centerThumbnail(currentIndex);
 }
 
 function centerThumbnail(index) {
@@ -76,42 +58,38 @@ function centerThumbnail(index) {
     const thumbnailWidth = thumbnails[0].clientWidth;
     const thumbnailsWidth = thumbnailsContainer.clientWidth;
     const thumbnailPosition = thumbnails[index].offsetLeft;
-
-    // A thumbnail sávot úgy görgetjük, hogy a kiválasztott thumbnail középen legyen
     thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
 }
 
-// Diavetítés frissítése
 function showSlide(index) {
     currentIndex = index;
-    currentImage.src = images[currentIndex].src;
-    currentText.innerHTML = images[currentIndex].text;
+    currentImage.src = slides[currentIndex].src;
+    currentText.innerHTML = slides[currentIndex].text;
     updateThumbnails();
     if (!isPaused) {
-        speakText(images[currentIndex].text);
+        speakText(slides[currentIndex].text);
     }
 }
 
 async function speakText(text) {
     if (isSpeaking && currentUtterance) {
-        // Ha már beszélünk, állítsuk le az aktuális felolvasást
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
+        speechSynthesis.cancel();
     }
 
-    const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, '')); // eltávolítjuk a HTML tageket
+    const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
     utterance.lang = 'hu-HU';
 
     const voices = await getVoice();
     const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
 
     if (maleVoice) {
-        utterance.voice = maleVoice; // Férfi hang kiválasztása
+        utterance.voice = maleVoice;
     }
 
     utterance.onend = () => {
-        isSpeaking = false; // Szöveg befejeződött
+        isSpeaking = false;
         if (!isPaused) {
-            nextSlide(); // Amint végez a felolvasással, automatikusan megy a következőre
+            nextSlide();
         }
     };
 
@@ -133,55 +111,70 @@ function getVoice() {
 
 function nextSlide() {
     if (!isPaused) {
-        currentIndex = (currentIndex + 1) % images.length;
+        currentIndex = (currentIndex + 1) % slides.length;
         showSlide(currentIndex);
     }
 }
 
 function previousSlide() {
     if (!isPaused) {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
         showSlide(currentIndex);
     }
 }
 
 function handleNavigation(index) {
     if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
+        speechSynthesis.cancel();
     }
-    currentIndex = index;
-    showSlide(currentIndex);
+    showSlide(index);
+    if (!isPaused) {
+        speakText(slides[index].text);
+    }
 }
 
 pauseButton.addEventListener('click', () => {
     isPaused = true;
     if (isSpeaking && currentUtterance) {
-        speechSynthesis.pause(); // Felolvasás megállítása
+        speechSynthesis.pause();
     }
 });
 
 resumeButton.addEventListener('click', () => {
     isPaused = false;
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.resume(); // Felolvasás folytatása
-    } else {
-        nextSlide(); // Ha nem volt felolvasás, ugorjunk a következőre
+    if (!isSpeaking) {
+        speakText(slides[currentIndex].text);
+    } else if (currentUtterance) {
+        speechSynthesis.resume();
     }
 });
 
 resetButton.addEventListener('click', () => {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
-    }
+    isPaused = false;
     currentIndex = 0;
     showSlide(currentIndex);
 });
 
-nextButton.addEventListener('click', nextSlide);
-previousButton.addEventListener('click', previousSlide);
+nextButton.addEventListener('click', () => {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    nextSlide();
+});
+
+previousButton.addEventListener('click', () => {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    previousSlide();
+});
+
 homeButton.addEventListener('click', () => {
     if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
+        speechSynthesis.cancel();
     }
-    window.location.href = 'index.html'; // Visszatérés a kezdőlapra
+    window.location.href = 'index.html';
 });
+
+// Első diánál kezdés
+showSlide(0);
