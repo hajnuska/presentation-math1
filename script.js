@@ -13,17 +13,11 @@ function parseCSV(data) {
     for (let i = 1; i < lines.length; i++) {
         const [index, text] = lines[i].split(',');
         if (index && text) {
-            if (index >= 3 && index <= 8) {
+            if (index >= 1 && index <= 9) { // Frissítettem az index tartományt 1-9-re
                 result.push({
-                    src: null,
+                    src: `https://github.com/hajnus/presentation-with-image-text/raw/main/images/image${index}.png`, // Kép URL frissítése
                     text: text.replace(/"/g, '').trim(),
-                    isText: true
-                });
-            } else {
-                result.push({
-                    src: `https://github.com/hajnus/presentation-with-image-text/raw/main/images/image${index}.png`,
-                    text: text.replace(/"/g, '').trim(),
-                    isText: false
+                    isText: index >= 10 // Frissítettem, hogy a 10 feletti indexek szövegesek
                 });
             }
         }
