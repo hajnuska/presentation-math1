@@ -3,113 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diavetítés</title>
+    <title>Feladatlista Diavetítés</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            overflow: hidden;
         }
 
-        .image-container {
-            width: 100%;
-            height: 400px;
-            background-color: #ddd;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .controls {
+        #slideshow {
             text-align: center;
-            margin: 20px;
         }
 
-        .button-container {
-            font-size: 16px; /* Eredeti szöveg mérete */
-            line-height: 1.5; /* Sortáv az eredeti szöveghez */
-            display: flex; /* Flexbox beállítás */
-            align-items: center; /* Vertikális középre igazítás */
-            justify-content: center; /* Horizontális középre igazítás */
-            height: 100px; /* Gomb magassága */
-            border: 1px solid black; /* Csak a vizualizációhoz */
-        }
-        
-        .button {
-            background-color: lightgreen;
-            border: none;
-            border-radius: 15px;
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            text-transform: uppercase;
-            line-height: 1.5; /* Sortáv az eredeti szöveghez */
+        .image-container img {
+            width: 85vw; /* Kép szélessége az oldal szélességének 85%-a */
+            max-width: 1000px; /* Maximum 1000px szélesség */
+            height: auto; /* Magasság automatikus */
         }
 
-        .button:hover {
-            transform: scale(1.1);
-            transition: transform 0.2s;
-            font-weight: bold;
-        }
-
-/*        .button.disabled {
-            background-color: lightgray;
-            cursor: not-allowed;
-        }*/
-
-        .highlighted-text {
-            font-size: 12.8px; /* Kisebb betűméret a kiemelt szöveghez */
+        .thumbnails-wrapper {
+            width: 85vw; /* Thumbnail sáv szélessége a nagy kép szélességével egyezik */
+            overflow-x: auto; /* Görgetősáv engedélyezése */
+            margin: 0 auto;
+            white-space: nowrap; /* Thumbnailok egymás mellett */
         }
 
         .thumbnails {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 20px;
-            overflow-x: auto;
-            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            position: relative; /* A thumbnailokat itt pozícionáljuk */
         }
 
         .thumbnails img {
             width: 100px;
             height: 60px;
-            object-fit: cover;
-            margin: 5px;
-            border: 2px solid transparent;
+            margin: 0 5px;
             cursor: pointer;
-            transition: border 0.3s, transform 0.3s;
+            vertical-align: middle;
         }
 
         .thumbnails img.active {
-            border: 2px solid blue;
+            border-bottom: 10px solid black; /* Thumbnail aláhúzása */
         }
 
-        .thumbnails img:hover {
-            transform: scale(1.1);
+        .controls {
+            margin: 20px 0;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: red;
+        }
+
+        button {
+            border: none;
+            border-radius: 15px; /* Kerekített sarkok 15px */
+            padding: 10px 20px;
+            font-size: 16px;
+            text-transform: uppercase; /* Minden szöveg nagybetűs lesz */
+            vertical-align: middle; /* Igazítás a sor közepére */
+            display: inline-block; /* Hogy a vertical-align működjön */
+            cursor: pointer;
+            margin: 5px;
+            background-color: lightgreen;
+            color: black;
+        }
+
+        button:hover {
+            transform: scale(1.1); /* A gomb méretének növelése 10%-kal */
+            font-weight: bold; /* Vastag betű minden gombon */
+        }
+
+        button.disabled {
+            background-color: grey;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .small-text {
+            font-size: 0.8em;
+            font-weight: normal; /* Nem vastag betűs */
         }
     </style>
 </head>
 <body>
-    <div id="imageContainer" class="image-container"></div>
-    <div id="controls" class="controls">
-        <button id="previousImage" class="button">Previous</button>
-        <button id="pause" class="button">Pause</button>
-        <button id="resume" class="button">
-            <span class="highlighted-text">Resume</span> Play
-        </button>
-        <button id="nextImage" class="button">Next</button>
-        <button id="reset" class="button">
-            <span class="highlighted-text">Restart</span> Start
-        </button>
-        <button id="home" class="button">Kezdőlap</button>
+    <div id="slideshow">
+        <div class="image-container">
+            <img id="currentImage" src="placeholder-image.jpg" alt="Slideshow Image">
+        </div>
+        <p id="currentText">Placeholder text goes here...</p>
+        <div class="thumbnails-wrapper">
+            <div class="thumbnails" id="thumbnails">
+                <!-- Thumbnails will be inserted here -->
+            </div>
+        </div>
+        <div class="controls">
+            <button id="previousImage">Previous</button>
+            <button id="nextImage">Next</button>
+            <button id="pause">Pause</button>
+            <button id="resume"><span class="small-text">Resume</span> Play</button>
+            <button id="reset"><span class="small-text">Restart</span> Start</button>
+            <button id="home">Home</button>
+        </div>
     </div>
-    <div id="thumbnails" class="thumbnails"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
