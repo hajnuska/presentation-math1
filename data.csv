@@ -1,12 +1,12 @@
 index,src,text
 1,image1.png,"Most megnézzük, mit jelentenek ezek . <span class='highlight'>az aláhúzott kifejezések.</span>"
 2,image2.png,"Ez most lehet, <span class='highlight'>bonyolultnak</span> tűnik"
-3,image3.png,"de elképzelhető, hogy <span class='highlight'>könnyen</span> megérted"
-4,image4.png,"hogy ez csupán <span class='highlight'>egy próba</span>"
+3,image3.png,"PRÓBA1 <span class='highlight'>próba</span> próba"
+4,image4.png,"hogy ez csupán <span class='highlight'>egy bármi</span>"
 5,image5.png,"amit szeretnék <span class='highlight'>a legjobban megcsinálni,</span> hogy később minden"
 6,image6.png,"<span class='highlight'>tökéletesen</span> sikerülhessen"
 7,image7.png,"<span class='highlight'>ez igeeeeeeeeen!</span>"
-8,image8.png,"<span class='highlight'>hurrrrráááá!</span>"
+8,image8.png,"<span class='highlight'>PRÓBA2</span>"
 9,image9.png,"<span class='highlight'>juhúúúúúú juhúú a birkatánc</span>"
 10,image10.png,"ez aztán <span class='highlight'>nem semmmmmmi</span>"
 
