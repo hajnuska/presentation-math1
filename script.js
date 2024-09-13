@@ -93,14 +93,14 @@ async function initialize() {
         const image = images[currentIndex];
         
         if (image.isText) {
-            // Szöveges háttér beállítása
-            imageContainer.style.backgroundImage = '';
-            imageContainer.src = '';
-            currentText.innerHTML = `<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">PRÓBA</div>`; // Szöveg beállítása
+            imageContainer.style.backgroundImage = ''; // Háttérkép eltávolítása
+            imageContainer.style.backgroundColor = '#ddd'; // Háttér színe
+            imageContainer.innerHTML = '<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">PRÓBA</div>'; // Szöveg beállítása
+            currentText.innerHTML = ''; // Szöveg eltávolítása
         } else {
-            // Kép háttér beállítása
-            imageContainer.style.backgroundImage = `url(${image.src})`;
-            imageContainer.src = '';
+            imageContainer.style.backgroundImage = `url(${image.src})`; // Háttérkép beállítása
+            imageContainer.style.backgroundColor = ''; // Háttér színének eltávolítása
+            imageContainer.innerHTML = ''; // Szöveg eltávolítása
             currentText.innerHTML = image.text; // Diavetítés szövege
         }
         updateThumbnails();
@@ -229,7 +229,6 @@ async function initialize() {
         }
     });
 
-    // Home funkció
     homeButton.addEventListener('click', () => {
         window.location.reload(); // Az oldal újratöltése
     });
