@@ -31,7 +31,7 @@
         }
 
         .button {
-            background-color: lightgreen;
+            background-color: pink;
             border: none;
             border-radius: 15px;
             padding: 10px 20px;
@@ -39,6 +39,7 @@
             cursor: pointer;
             font-size: 16px;
             text-transform: uppercase;
+            line-height: 1.5; /* Sortáv az eredeti szöveghez */
         }
 
         .button:hover {
@@ -47,15 +48,17 @@
             font-weight: bold;
         }
 
-        .button.disabled {
+/*        .button.disabled {
             background-color: lightgray;
             cursor: not-allowed;
-        }
+        }*/
 
         .small-text {
             font-size: 14px;
             font-weight: normal;
-            vertical-align: middle;
+            vertical-align: middle; /* Kiemelt szöveg középre igazítása */
+            display: inline-block; /* Inline block, hogy a vertical-align működjön */
+            line-height: 1.5; /* Azonos sor magasság, mint az eredeti szöveg */
         }
 
         .thumbnails {
