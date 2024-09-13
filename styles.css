@@ -8,7 +8,7 @@ body {
 
 .image-container {
     width: 100%;
-    height: 400px;
+    height: 400px;https://github.com/hajnus/presentation-with-image-text/tree/main
     background-color: #ddd;
     background-size: cover;
     background-position: center;
@@ -32,11 +32,16 @@ body {
     margin: 5px;
     cursor: pointer;
     font-size: 16px;
+    text-transform: uppercase; /* Nagybetűs feliratok */
 }
-
+#resume, #reset {
+    font-size: 14px; /* Kisebb feliratok */
+    font-weight: normal; /* Normál betűvastagság */
+}
 .button:hover {
     transform: scale(1.1);
     transition: transform 0.2s;
+    font-weight: bold; /* Vastag betűs hover állapot */
 }
 
 /*.button.disabled {
