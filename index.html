@@ -7,106 +7,84 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            overflow: hidden;
         }
 
         #slideshow {
-            width: 80%;
-            max-width: 900px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
             text-align: center;
         }
 
-        .image-container {
-            position: relative;
-            max-width: 100%;
-            height: 300px;
-        }
-
         .image-container img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 10px;
-        }
-
-        p {
-            font-size: 1.2em;
-            margin-top: 20px;
-            color: #333;
+            width: 85vw; /* Kép szélessége az oldal szélességének 85%-a */
+            max-width: 1000px; /* Maximum 1000px szélesség */
+            height: auto; /* Magasság automatikus */
         }
 
         .thumbnails-wrapper {
-            margin-top: 20px;
-            overflow-x: scroll;
-            white-space: nowrap;
-            padding-bottom: 10px;
+            width: 85vw; /* Thumbnail sáv szélessége a nagy kép szélességével egyezik */
+            overflow-x: auto; /* Görgetősáv engedélyezése */
+            margin: 0 auto;
+            white-space: nowrap; /* Thumbnailok egymás mellett */
+        }
+
+        .thumbnails {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            position: relative; /* A thumbnailokat itt pozícionáljuk */
         }
 
         .thumbnails img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            margin-right: 10px;
+            width: 100px;
+            height: 60px;
+            margin: 0 5px;
             cursor: pointer;
-            border: 2px solid transparent;
-            border-radius: 5px;
+            vertical-align: middle;
         }
 
         .thumbnails img.active {
-            border-color: #007bff;
+            border-bottom: 10px solid black; /* Thumbnail aláhúzása */
         }
 
         .controls {
-            margin-top: 20px;
+            margin: 20px 0;
         }
 
-        .controls button {
-    border: none;
-    border-radius: 15px; /* 15px lekerekített sarkok */
-    padding: 10px 20px;
-    font-size: 16px;
-    text-transform: uppercase; /* Minden szöveg nagybetűs lesz */
-    color: black;
-/*    cursor: pointer;*/
-    margin: 5px;
-    background-color: lightgreen; /* Alapértelmezett szín */
-    transition: all 0.3s ease; /* Simább átmenet a hover hatásokhoz */
+        button {
+            background-color: lightgreen; /* Alapértelmezett szín */
+            color: black;
+            border: none;
+            border-radius: 15px; /* 15px lekerekített sarkok */
+            padding: 10px 20px;
+            font-size: 16px;
+            text-transform: uppercase; /* Minden szöveg nagybetűs lesz */
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.3s ease; /* Simább átmenet a hover hatásoknál */
         }
 
-        .controls button:hover {
-    transform: scale(1.1); /* Hover hatás: gomb 10%-kal nagyobb */
-    font-weight: bold; /* Hover hatás: vastagabb betű */
-        }
-
-/*        .controls button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }*/
-
-        .small-text {
-            font-size: 0.9em;
+        button:hover {
+            transform: scale(1.1); /* Hover hatás: gomb 10%-kal nagyobb */
+            font-weight: bold; /* Hover hatás: vastagabb betű */
         }
 
         .highlight {
-            background-color: yellow;
             font-weight: bold;
+            color: red;
+        }
+
+        .small-text {
+            font-size: 0.8em;
+            font-weight: normal; /* Nem vastag betűs */
         }
     </style>
 </head>
 <body>
     <div id="slideshow">
         <div class="image-container">
-            <img id="currentImage" src="images/placeholder-image.jpg" alt="Slideshow Image">
+            <img id="currentImage" src="images/image1.png" alt="Slideshow Image">
         </div>
         <p id="currentText">Placeholder text goes here...</p>
         <div class="thumbnails-wrapper">
@@ -123,9 +101,6 @@
             <button id="home">Home</button>
         </div>
     </div>
-
-    <!-- PapaParse könyvtár betöltése a CSV kezeléséhez -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
