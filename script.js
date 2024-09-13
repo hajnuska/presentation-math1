@@ -1,189 +1,205 @@
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('https://raw.githubusercontent.com/hajnus/presentation-with-image-text/main/data.csv')
-        .then(response => response.text())
-        .then(text => Papa.parse(text, {
-            header: true,
-            complete: (results) => {
-                const images = results.data.map(row => ({
-                    src: `https://raw.githubusercontent.com/hajnus/presentation-with-image-text/main/images/${row.src}`,
-                    text: row.text
-                }));
+console.log("A script.js fájl sikeresen betöltődött.");
 
-                let currentIndex = 0;
-                let isPaused = false;
-                let isSpeaking = false;
-                let currentUtterance = null;
+let images = [];
+let currentIndex = 0;
+let isPaused = false;
+let isSpeaking = false;
+let currentUtterance = null;
 
-                const currentImage = document.getElementById('currentImage');
-                const currentText = document.getElementById('currentText');
-                const thumbnailsContainer = document.getElementById('thumbnails');
-                const pauseButton = document.getElementById('pause');
-                const resumeButton = document.getElementById('resume');
-                const resetButton = document.getElementById('reset');
-                const nextButton = document.getElementById('nextImage');
-                const previousButton = document.getElementById('previousImage');
-                const homeButton = document.getElementById('home');
+const currentImage = document.getElementById('currentImage');
+const currentText = document.getElementById('currentText');
+const thumbnailsContainer = document.getElementById('thumbnails');
+const pauseButton = document.getElementById('pause');
+const resumeButton = document.getElementById('resume');
+const resetButton = document.getElementById('reset');
+const nextButton = document.getElementById('nextImage');
+const previousButton = document.getElementById('previousImage');
+const homeButton = document.getElementById('home');
 
-                images.forEach((image, index) => {
-                    const thumb = document.createElement('img');
-                    thumb.src = image.src;
-                    thumb.dataset.index = index;
-                    thumb.addEventListener('click', () => {
-                        handleNavigation(index);
-                    });
-                    thumbnailsContainer.appendChild(thumb);
-                });
+// CSV beolvasása és feldolgozása
+async function fetchCSV() {
+    const response = await fetch('data.csv');
+    const data = await response.text();
+    const rows = data.split('\n').slice(1); // Első sor kihagyása (fejléc)
+    
+    images = rows.map(row => {
+        const [index, src, text] = row.split(',');
+        return {
+            src: src.trim(),
+            text: text.trim().replace(/"/g, '') // Tisztítjuk a szöveget
+        };
+    });
 
-                function updateThumbnails() {
-                    const thumbnails = document.querySelectorAll('.thumbnails img');
-                    thumbnails.forEach((thumb, index) => {
-                        thumb.classList.toggle('active', index === currentIndex);
-                    });
-                    centerThumbnail(currentIndex);
-                }
+    // Az első kép megjelenítése
+    showSlide(0);
+    generateThumbnails();
+}
 
-                function centerThumbnail(index) {
-                    const thumbnails = document.querySelectorAll('.thumbnails img');
-                    const thumbnailWidth = thumbnails[0].clientWidth;
-                    const thumbnailsWidth = thumbnailsContainer.clientWidth;
-                    const thumbnailPosition = thumbnails[index].offsetLeft;
-                    thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
-                }
+// Thumbnailok generálása
+function generateThumbnails() {
+    images.forEach((image, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = image.src;
+        thumb.dataset.index = index;
+        thumb.addEventListener('click', () => {
+            handleNavigation(index);
+        });
+        thumbnailsContainer.appendChild(thumb);
+    });
+}
 
-                function showSlide(index) {
-                    currentIndex = index;
-                    currentImage.src = images[currentIndex].src;
-                    currentText.innerHTML = images[currentIndex].text;
-                    updateThumbnails();
-                    if (!isPaused) {
-                        speakText(images[currentIndex].text);
-                    }
-                }
+function updateThumbnails() {
+    const thumbnails = document.querySelectorAll('.thumbnails img');
+    thumbnails.forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentIndex);
+    });
+    centerThumbnail(currentIndex);
+}
 
-                async function speakText(text) {
-                    if (isSpeaking && currentUtterance) {
-                        speechSynthesis.cancel();
-                    }
-                    const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
-                    utterance.lang = 'hu-HU';
+function centerThumbnail(index) {
+    const thumbnails = document.querySelectorAll('.thumbnails img');
+    const thumbnailWidth = thumbnails[0].clientWidth;
+    const thumbnailsWidth = thumbnailsContainer.clientWidth;
+    const thumbnailPosition = thumbnails[index].offsetLeft;
+    thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
+}
 
-                    const voices = await getVoice();
-                    const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
+// Diavetítés frissítése
+function showSlide(index) {
+    currentIndex = index;
+    currentImage.src = images[currentIndex].src;
+    currentText.innerHTML = images[currentIndex].text;
+    updateThumbnails();
+    if (!isPaused) {
+        speakText(images[currentIndex].text);
+    }
+}
 
-                    if (maleVoice) {
-                        utterance.voice = maleVoice;
-                    }
+async function speakText(text) {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel();
+    }
 
-                    utterance.onend = () => {
-                        isSpeaking = false;
-                        if (!isPaused) {
-                            nextSlide();
-                        }
-                    };
+    const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
+    utterance.lang = 'hu-HU';
 
-                    isSpeaking = true;
-                    currentUtterance = utterance;
-                    speechSynthesis.speak(utterance);
-                }
+    const voices = await getVoice();
+    const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
 
-                function getVoice() {
-                    return new Promise(resolve => {
-                        const voices = speechSynthesis.getVoices();
-                        if (voices.length) {
-                            resolve(voices);
-                        } else {
-                            speechSynthesis.onvoiceschanged = () => resolve(speechSynthesis.getVoices());
-                        }
-                    });
-                }
+    if (maleVoice) {
+        utterance.voice = maleVoice;
+    }
 
-                function nextSlide() {
-                    if (!isPaused) {
-                        currentIndex = (currentIndex + 1) % images.length;
-                        showSlide(currentIndex);
-                    }
-                }
+    utterance.onend = () => {
+        isSpeaking = false;
+        if (!isPaused) {
+            nextSlide();
+        }
+    };
 
-                function previousSlide() {
-                    if (!isPaused) {
-                        currentIndex = (currentIndex - 1 + images.length) % images.length;
-                        showSlide(currentIndex);
-                    }
-                }
+    isSpeaking = true;
+    currentUtterance = utterance;
+    speechSynthesis.speak(utterance);
+}
 
-                function handleNavigation(index) {
-                    if (isSpeaking && currentUtterance) {
-                        speechSynthesis.cancel();
-                    }
-                    showSlide(index);
-                    if (!isPaused) {
-                        speakText(images[index].text);
-                    }
-                }
+function getVoice() {
+    return new Promise(resolve => {
+        const voices = speechSynthesis.getVoices();
+        if (voices.length) {
+            resolve(voices);
+        } else {
+            speechSynthesis.onvoiceschanged = () => resolve(speechSynthesis.getVoices());
+        }
+    });
+}
 
-                pauseButton.addEventListener('click', () => {
-                    isPaused = true;
-                    pauseButton.classList.add('disabled');
-                    resumeButton.classList.remove('disabled');
-                    resetButton.classList.add('disabled');
-                    if (isSpeaking && currentUtterance) {
-                        speechSynthesis.pause();
-                    }
-                });
+function nextSlide() {
+    if (!isPaused) {
+        currentIndex = (currentIndex + 1) % images.length;
+        showSlide(currentIndex);
+    }
+}
 
-                resumeButton.addEventListener('click', () => {
-                    isPaused = false;
-                    pauseButton.classList.remove('disabled');
-                    resumeButton.classList.add('disabled');
-                    resetButton.classList.remove('disabled');
-                    if (!isSpeaking) {
-                        speakText(images[currentIndex].text);
-                    } else if (currentUtterance) {
-                        speechSynthesis.resume();
-                    }
-                });
+function previousSlide() {
+    if (!isPaused) {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showSlide(currentIndex);
+    }
+}
 
-                resetButton.addEventListener('click', () => {
-                    isPaused = false;
-                    currentIndex = 0;
-                    showSlide(currentIndex);
-                    pauseButton.classList.remove('disabled');
-                    resumeButton.classList.add('disabled');
-                    resetButton.classList.add('disabled');
-                    if (!isSpeaking) {
-                        nextSlide();
-                    }
-                });
+function handleNavigation(index) {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    showSlide(index);
+    if (!isPaused) {
+        speakText(images[index].text);
+    }
+}
 
-                nextButton.addEventListener('click', () => {
-                    if (isSpeaking && currentUtterance) {
-                        speechSynthesis.cancel();
-                    }
-                    nextSlide();
-                    if (!isPaused) {
-                        speakText(images[currentIndex].text);
-                    }
-                });
-
-                previousButton.addEventListener('click', () => {
-                    if (isSpeaking && currentUtterance) {
-                        speechSynthesis.cancel();
-                    }
-                    previousSlide();
-                    if (!isPaused) {
-                        speakText(images[currentIndex].text);
-                    }
-                });
-
-                homeButton.addEventListener('click', () => {
-                    if (isSpeaking && currentUtterance) {
-                        speechSynthesis.cancel();
-                    }
-                    window.location.href = 'index.html';
-                });
-
-                showSlide(0);
-            }
-        })
-        .catch(error => console.error('Error loading the CSV file:', error));
+// Pause funkció
+pauseButton.addEventListener('click', () => {
+    isPaused = true;
+    pauseButton.classList.add('disabled');
+    resumeButton.classList.remove('disabled');
+    resetButton.classList.add('disabled');
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.pause();
+    }
 });
+
+// Resume funkció
+resumeButton.addEventListener('click', () => {
+    isPaused = false;
+    pauseButton.classList.remove('disabled');
+    resumeButton.classList.add('disabled');
+    resetButton.classList.remove('disabled');
+    if (!isSpeaking) {
+        speakText(images[currentIndex].text);
+    } else if (currentUtterance) {
+        speechSynthesis.resume();
+    }
+});
+
+// Reset funkció
+resetButton.addEventListener('click', () => {
+    isPaused = false;
+    currentIndex = 0;
+    showSlide(currentIndex);
+    pauseButton.classList.remove('disabled');
+    resumeButton.classList.add('disabled');
+    resetButton.classList.add('disabled');
+    if (!isSpeaking) {
+        nextSlide();
+    }
+});
+
+nextButton.addEventListener('click', () => {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    nextSlide();
+    if (!isPaused) {
+        speakText(images[currentIndex].text);
+    }
+});
+
+previousButton.addEventListener('click', () => {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    previousSlide();
+    if (!isPaused) {
+        speakText(images[currentIndex].text);
+    }
+});
+
+homeButton.addEventListener('click', () => {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel();
+    }
+    window.location.href = 'index.html';
+});
+
+// Az adatok beolvasása és a slideshow elindítása
+fetchCSV();
