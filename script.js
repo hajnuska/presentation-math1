@@ -13,11 +13,19 @@ function parseCSV(data) {
     for (let i = 1; i < lines.length; i++) {
         const [index, text] = lines[i].split(',');
         if (index && text) {
-            result.push({
-                src: `https://github.com/hajnus/presentation-with-image-text/raw/main/images/image${index}.png`,
-                text: text.replace(/"/g, '').trim(),
-                isText: index == 3 || index == 8
-            });
+            if (index >= 3 && index <= 8) {
+                result.push({
+                    src: null,
+                    text: text.replace(/"/g, '').trim(),
+                    isText: true
+                });
+            } else {
+                result.push({
+                    src: `https://github.com/hajnus/presentation-with-image-text/raw/main/images/image${index}.png`,
+                    text: text.replace(/"/g, '').trim(),
+                    isText: false
+                });
+            }
         }
     }
     return result;
@@ -43,7 +51,9 @@ async function initialize() {
 
     images.forEach((image, index) => {
         const thumb = document.createElement('img');
-        thumb.src = image.src;
+        thumb.src = image.isText
+            ? 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="60" viewBox="0 0 100 60"><rect width="100" height="60" fill="#ddd"/><text x="50" y="30" font-size="12" text-anchor="middle" fill="#333">PRÓBA</text></svg>'
+            : image.src;
         thumb.dataset.index = index;
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
@@ -73,10 +83,10 @@ async function initialize() {
         if (image.isText) {
             imageContainer.style.backgroundImage = ''; 
             imageContainer.style.backgroundColor = '#ddd'; 
-            imageContainer.innerHTML = `<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">${image.text}</div>`;
+            imageContainer.innerHTML = `<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">${image.text}</div>`; 
         } else {
             imageContainer.style.backgroundImage = `url(${image.src})`; 
-            imageContainer.style.backgroundColor = '#fff';  // Fehér háttér, ha kép van
+            imageContainer.style.backgroundColor = '#fff';  
             imageContainer.innerHTML = ''; 
         }
         updateThumbnails();
