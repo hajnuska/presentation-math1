@@ -63,44 +63,44 @@
             padding: 10px 20px;
             font-size: 16px;
             text-transform: uppercase; /* Minden szöveg nagybetűs lesz */
-            vertical-align: middle; /* Igazítás a sor közepére */
-            display: inline-block; /* Hogy a vertical-align működjön */
+            vertical-align: middle; /* Igazítás a középre */
+            color: white;
+            background-color: #007bff;
+            cursor: pointer;
             margin: 5px;
-            background-color: lightgreen;
-            color: black;
         }
 
         button:hover {
-            transform: scale(1.1); /* A gomb méretének növelése 10%-kal */
-            font-weight: bold; /* Vastag betű minden gombon */
+            background-color: #0056b3;
         }
 
-        .small-text {
-            font-size: 0.8em;
-            font-weight: normal; /* Nem vastag betűs */
+        button:focus {
+            outline: none;
         }
     </style>
 </head>
 <body>
+
     <div id="slideshow">
         <div class="image-container">
-            <img id="currentImage" src="images/placeholder-image.jpg" alt="Slideshow Image">
+            <img id="currentImage" src="" alt="Diavetítés képe">
         </div>
-        <p id="currentText">Placeholder text goes here...</p>
+        <div id="currentText"></div>
+
         <div class="thumbnails-wrapper">
-            <div class="thumbnails" id="thumbnails">
-                <!-- Thumbnails will be inserted here -->
-            </div>
+            <div id="thumbnails" class="thumbnails"></div>
         </div>
+
         <div class="controls">
-            <button id="previousImage">Previous</button>
-            <button id="nextImage">Next</button>
-            <button id="pause">Pause</button>
-            <button id="resume"><span class="small-text">Resume</span> Play</button>
-            <button id="reset"><span class="small-text">Restart</span> Start</button>
-            <button id="home">Home</button>
+            <button id="previousImage">Előző kép</button>
+            <button id="nextImage">Következő kép</button>
+            <button id="pause">Szünet</button>
+            <button id="resume">Folytatás</button>
+            <button id="reset">Vissza az elejére</button>
+            <button id="home">Vissza a főoldalra</button>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
