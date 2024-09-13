@@ -1,5 +1,3 @@
-console.log("A script.js fájl sikeresen betöltődött.");
-
 document.addEventListener('DOMContentLoaded', () => {
     fetch('https://raw.githubusercontent.com/hajnus/presentation-with-image-text/main/data.csv')
         .then(response => response.text())
@@ -26,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const previousButton = document.getElementById('previousImage');
                 const homeButton = document.getElementById('home');
 
-                // Thumbnails generálása
                 images.forEach((image, index) => {
                     const thumb = document.createElement('img');
                     thumb.src = image.src;
@@ -187,5 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 showSlide(0);
             }
-        });
+        })
+        .catch(error => console.error('Error loading the CSV file:', error));
 });
