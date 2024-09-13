@@ -17,23 +17,23 @@
         }
 
         .image-container img {
-            width: 85vw; /* Kép szélessége az oldal szélességének 85%-a */
-            max-width: 1000px; /* Maximum 1000px szélesség */
-            height: auto; /* Magasság automatikus */
+            width: 85vw;
+            max-width: 1000px;
+            height: auto;
         }
 
         .thumbnails-wrapper {
-            width: 85vw; /* Thumbnail sáv szélessége a nagy kép szélességével egyezik */
-            overflow-x: auto; /* Görgetősáv engedélyezése */
+            width: 85vw;
+            overflow-x: auto;
             margin: 0 auto;
-            white-space: nowrap; /* Thumbnailok egymás mellett */
+            white-space: nowrap;
         }
 
         .thumbnails {
             display: inline-flex;
             align-items: center;
             margin-top: 10px;
-            position: relative; /* A thumbnailokat itt pozícionáljuk */
+            position: relative;
         }
 
         .thumbnails img {
@@ -45,7 +45,7 @@
         }
 
         .thumbnails img.active {
-            border-bottom: 10px solid black; /* Thumbnail aláhúzása */
+            border-bottom: 10px solid black;
         }
 
         .controls {
@@ -59,33 +59,31 @@
 
         button {
             border: none;
-            border-radius: 15px; /* Kerekített sarkok 15px */
+            border-radius: 15px;
             padding: 10px 20px;
             font-size: 16px;
-            text-transform: uppercase; /* Minden szöveg nagybetűs lesz */
-            vertical-align: middle; /* Igazítás a sor közepére */
-            display: inline-block; /* Hogy a vertical-align működjön */
-            cursor: pointer;
+            text-transform: uppercase;
+            vertical-align: middle;
+            display: inline-block;
             margin: 5px;
-            background-color: pink;
+            background-color: lightgreen;
             color: black;
         }
 
         button:hover {
-            transform: scale(1.1); /* A gomb méretének növelése 10%-kal */
-            font-weight: bold; /* Vastag betű minden gombon */
+            transform: scale(1.1);
+            font-weight: bold;
         }
 
         .small-text {
             font-size: 0.8em;
-            font-weight: normal; /* Nem vastag betűs */
+            font-weight: normal;
         }
     </style>
 </head>
 <body>
     <div id="slideshow">
         <div class="image-container">
-            <!-- Az alapértelmezett kép eltávolítva -->
             <img id="currentImage" alt="Slideshow Image">
         </div>
         <p id="currentText">Placeholder text goes here...</p>
