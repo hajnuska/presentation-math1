@@ -2,4 +2,4 @@
 
 
 reach
-hajnus.github.io/presentation-with-image-tex
+hajnus.github.io/presentation-with-image-text
