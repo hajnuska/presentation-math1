@@ -4,7 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diavetítés</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.image-container {
+    width: 100%;
+    height: 400px;
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controls {
+    text-align: center;
+    margin: 20px;
+}
+
+.button {
+    background-color: lightgreen;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
+
+.button.disabled {
+    background-color: lightgray;
+    cursor: not-allowed;
+}
+
+.thumbnails {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.thumbnails img {
+    width: 100px;
+    height: 60px;
+    object-fit: cover;
+    margin: 5px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border 0.3s, transform 0.3s;
+}
+
+.thumbnails img.active {
+    border: 2px solid blue;
+}
+
+.thumbnails img:hover {
+    transform: scale(1.1);
+}
+        </style>
 </head>
 <body>
     <div id="imageContainer" class="image-container"></div>
