@@ -2,17 +2,31 @@ console.log("A script.js fájl sikeresen betöltődött.");
 
 // A képek és szövegek betöltése
 async function loadSlides() {
-    const response = await fetch('slides-data.csv'); // CSV fájl elérési útja
-    const text = await response.text();
-    const lines = text.split('\n');
+    try {
+        const response = await fetch('slides-data.csv'); // CSV fájl elérési útja
+        if (!response.ok) {
+            throw new Error(`Hiba a CSV fájl betöltésekor: ${response.statusText}`);
+        }
+        const text = await response.text();
+        const lines = text.split('\n');
 
-    return lines.slice(1).map(line => {
-        const [index, src, text] = line.split(',');
-        return {
-            src: `images/${src.trim()}`, // Képek elérési útja
-            text: text ? text.trim() : `Ez a(z) ${index} kép.` // Alapértelmezett szöveg
-        };
-    });
+        // Ellenőrzés, hogy van-e adat
+        if (lines.length <= 1) {
+            console.error('A CSV fájl üres vagy nem tartalmaz adatokat.');
+            return [];
+        }
+
+        return lines.slice(1).map(line => {
+            const [index, src, text] = line.split(',');
+            return {
+                src: `https://github.com/hajnus/presentation-with-image-text/raw/main/images/${src.trim()}`, // GitHub raw URL
+                text: text ? text.trim() : `Ez a(z) ${index} kép.`
+            };
+        });
+    } catch (error) {
+        console.error('Hiba történt a diák betöltése során:', error);
+        return [];
+    }
 }
 
 let images = [];
