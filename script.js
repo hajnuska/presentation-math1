@@ -1,7 +1,5 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
-// script.js
-
 async function loadCSV() {
     const response = await fetch('https://github.com/hajnus/presentation-with-image-text/raw/main/data.csv');
     const data = await response.text();
@@ -11,7 +9,7 @@ async function loadCSV() {
 function parseCSV(data) {
     const lines = data.split('\n');
     const result = [];
-    
+
     for (let i = 1; i < lines.length; i++) {
         const [index, text] = lines[i].split(',');
         if (index && text) {
@@ -43,7 +41,6 @@ async function initialize() {
     let currentUtterance = null;
 
     const imageContainer = document.getElementById('imageContainer');
-    const currentText = document.getElementById('currentText');
     const thumbnailsContainer = document.getElementById('thumbnails');
     const pauseButton = document.getElementById('pause');
     const resumeButton = document.getElementById('resume');
@@ -54,15 +51,11 @@ async function initialize() {
 
     images.forEach((image, index) => {
         const thumb = document.createElement('img');
-        if (image.isText) {
-            thumb.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="60" viewBox="0 0 100 60"><rect width="100" height="60" fill="#ddd"/><text x="50" y="30" font-size="12" text-anchor="middle" fill="#333">PRÓBA</text></svg>';
-        } else {
-            thumb.src = image.src;
-        }
+        thumb.src = image.isText
+            ? 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="60" viewBox="0 0 100 60"><rect width="100" height="60" fill="#ddd"/><text x="50" y="30" font-size="12" text-anchor="middle" fill="#333">PRÓBA</text></svg>'
+            : image.src;
         thumb.dataset.index = index;
-        thumb.addEventListener('click', () => {
-            handleNavigation(index);
-        });
+        thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
     });
 
@@ -86,20 +79,19 @@ async function initialize() {
     function showSlide(index) {
         currentIndex = index;
         const image = images[currentIndex];
-        
+
         if (image.isText) {
             imageContainer.style.backgroundImage = ''; 
             imageContainer.style.backgroundColor = '#ddd'; 
-            imageContainer.innerHTML = '<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">PRÓBA</div>'; 
-            currentText.innerHTML = ''; 
+            imageContainer.innerHTML = `<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">${image.text}</div>`; 
         } else {
             imageContainer.style.backgroundImage = `url(${image.src})`; 
             imageContainer.style.backgroundColor = ''; 
             imageContainer.innerHTML = ''; 
-            currentText.innerHTML = image.text; 
         }
+
         updateThumbnails();
-        if (!isPaused) {
+        if (!isPaused && !image.isText) {
             speakText(image.text);
         }
     }
@@ -161,7 +153,7 @@ async function initialize() {
             speechSynthesis.cancel(); 
         }
         showSlide(index);
-        if (!isPaused) {
+        if (!isPaused && !images[index].isText) {
             speakText(images[index].text); 
         }
     }
@@ -205,7 +197,7 @@ async function initialize() {
             speechSynthesis.cancel(); 
         }
         nextSlide();
-        if (!isPaused) {
+        if (!isPaused && !images[currentIndex].isText) {
             speakText(images[currentIndex].text); 
         }
     });
@@ -215,7 +207,7 @@ async function initialize() {
             speechSynthesis.cancel(); 
         }
         previousSlide();
-        if (!isPaused) {
+        if (!isPaused && !images[currentIndex].isText) {
             speakText(images[currentIndex].text); 
         }
     });
