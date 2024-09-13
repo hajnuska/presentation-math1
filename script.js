@@ -1,10 +1,30 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
+// Képek és szövegek tömbje
 let images = [];
+
+// CSV fájl beolvasása és képek hozzáadása a tömbhöz
+fetch('data.csv')
+    .then(response => response.text())
+    .then(csvText => {
+        const rows = csvText.trim().split('\n').slice(1); // Az első sor a fejléc, azt kihagyjuk
+        images = rows.map(row => {
+            const [index, src, text] = row.split(',').map(field => field.trim().replace(/^"|"$/g, ''));
+            return {
+                src: `images/${src}`, // Kép elérési útvonal a 'images' mappában
+                text: text
+            };
+        });
+        // Thumbnails generálása és az első kép megjelenítése
+        generateThumbnails();
+        showSlide(0);
+    })
+    .catch(error => console.error('Hiba a CSV fájl beolvasása közben:', error));
+
 let currentIndex = 0;
 let isPaused = false;
-let isSpeaking = false;
-let currentUtterance = null;
+let isSpeaking = false; 
+let currentUtterance = null; 
 
 const currentImage = document.getElementById('currentImage');
 const currentText = document.getElementById('currentText');
@@ -16,26 +36,7 @@ const nextButton = document.getElementById('nextImage');
 const previousButton = document.getElementById('previousImage');
 const homeButton = document.getElementById('home');
 
-// CSV beolvasása és feldolgozása
-async function fetchCSV() {
-    const response = await fetch('data.csv');
-    const data = await response.text();
-    const rows = data.split('\n').slice(1); // Első sor kihagyása (fejléc)
-    
-    images = rows.map(row => {
-        const [index, src, text] = row.split(',');
-        return {
-            src: src.trim(),
-            text: text.trim().replace(/"/g, '') // Tisztítjuk a szöveget
-        };
-    });
-
-    // Az első kép megjelenítése
-    showSlide(0);
-    generateThumbnails();
-}
-
-// Thumbnailok generálása
+// Thumbnails generálása
 function generateThumbnails() {
     images.forEach((image, index) => {
         const thumb = document.createElement('img');
@@ -64,7 +65,6 @@ function centerThumbnail(index) {
     thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
 }
 
-// Diavetítés frissítése
 function showSlide(index) {
     currentIndex = index;
     currentImage.src = images[currentIndex].src;
@@ -200,6 +200,3 @@ homeButton.addEventListener('click', () => {
     }
     window.location.href = 'index.html';
 });
-
-// Az adatok beolvasása és a slideshow elindítása
-fetchCSV();
