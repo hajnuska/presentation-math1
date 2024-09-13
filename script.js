@@ -2,16 +2,15 @@ console.log("A script.js fájl sikeresen betöltődött.");
 
 // A képek és szövegek betöltése
 async function loadSlides() {
-    // Képek és szövegek betöltése a táblázatból
-    const response = await fetch('slides-data.csv'); // vagy a táblázat URL-je
+    const response = await fetch('slides-data.csv'); // CSV fájl elérési útja
     const text = await response.text();
     const lines = text.split('\n');
-    
+
     return lines.slice(1).map(line => {
         const [index, src, text] = line.split(',');
         return {
-            src: `images/${src}`, // Az "images" mappából töltjük be a képeket
-            text: text || `Ez a(z) ${index} kép.` // Alapértelmezett szöveg
+            src: `images/${src.trim()}`, // Képek elérési útja
+            text: text ? text.trim() : `Ez a(z) ${index} kép.` // Alapértelmezett szöveg
         };
     });
 }
@@ -136,72 +135,39 @@ function handleNavigation(index) {
     if (isSpeaking && currentUtterance) {
         speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
     }
-    showSlide(index);
-    if (!isPaused) {
-        speakText(images[index].text); // Az új kép szövegének felolvasása
-    }
+    currentIndex = index;
+    showSlide(currentIndex);
 }
 
-// Pause funkció
 pauseButton.addEventListener('click', () => {
     isPaused = true;
-    pauseButton.classList.add('disabled'); // Pause gomb állapotának módosítása
-    resumeButton.classList.remove('disabled'); // Resume gomb engedélyezése
-    resetButton.classList.add('disabled'); // Reset gomb letiltása
     if (isSpeaking && currentUtterance) {
-        speechSynthesis.pause(); // A felolvasás megállítása
+        speechSynthesis.pause(); // Felolvasás megállítása
     }
 });
 
-// Resume funkció
 resumeButton.addEventListener('click', () => {
     isPaused = false;
-    pauseButton.classList.remove('disabled'); // Pause gomb engedélyezése
-    resumeButton.classList.add('disabled'); // Resume gomb letiltása
-    resetButton.classList.remove('disabled'); // Reset gomb engedélyezése
-    if (!isSpeaking) {
-        speakText(images[currentIndex].text); // Az aktuális kép szövegének felolvasása
-    } else if (currentUtterance) {
-        speechSynthesis.resume(); // A felolvasás folytatása
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.resume(); // Felolvasás folytatása
+    } else {
+        nextSlide(); // Ha nem volt felolvasás, ugorjunk a következőre
     }
 });
 
-// Reset funkció
 resetButton.addEventListener('click', () => {
-    isPaused = false;
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
+    }
     currentIndex = 0;
     showSlide(currentIndex);
-    pauseButton.classList.remove('disabled'); // Pause gomb engedélyezése
-    resumeButton.classList.add('disabled'); // Resume gomb letiltása
-    resetButton.classList.add('disabled'); // Reset gomb állapotának módosítása
-    if (!isSpeaking) {
-        nextSlide(); // Folytatás a következő képpel a reset után
-    }
 });
 
-nextButton.addEventListener('click', () => {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
-    }
-    nextSlide();
-    if (!isPaused) {
-        speakText(images[currentIndex].text); // Az aktuális kép szövegének felolvasása
-    }
-});
-
-previousButton.addEventListener('click', () => {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
-    }
-    previousSlide();
-    if (!isPaused) {
-        speakText(images[currentIndex].text); // Az aktuális kép szövegének felolvasása
-    }
-});
-
+nextButton.addEventListener('click', nextSlide);
+previousButton.addEventListener('click', previousSlide);
 homeButton.addEventListener('click', () => {
     if (isSpeaking && currentUtterance) {
         speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
     }
-    window.location.href = 'index.html';
+    window.location.href = 'index.html'; // Visszatérés a kezdőlapra
 });
