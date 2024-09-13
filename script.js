@@ -77,23 +77,23 @@ async function initialize() {
     }
 
     function showSlide(index) {
-    currentIndex = index;
-    const image = images[currentIndex];
+        currentIndex = index;
+        const image = images[currentIndex];
 
-    if (image.isText) {
-        imageContainer.style.backgroundImage = ''; 
-        imageContainer.style.backgroundColor = '#ddd'; 
-        imageContainer.innerHTML = `<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">${image.text}</div>`; 
-    } else {
-        imageContainer.style.backgroundImage = `url(${image.src})`; 
-        imageContainer.style.backgroundColor = '#fff';  // Fehér háttér, ha kép van
-        imageContainer.innerHTML = ''; 
+        if (image.isText) {
+            imageContainer.style.backgroundImage = ''; 
+            imageContainer.style.backgroundColor = '#ddd'; 
+            imageContainer.innerHTML = `<div style="font-size: 30px; font-weight: bold; color: #333; text-align: center; padding-top: 20px;">${image.text}</div>`;
+        } else {
+            imageContainer.style.backgroundImage = `url(${image.src})`; 
+            imageContainer.style.backgroundColor = '#fff';  // Fehér háttér, ha kép van
+            imageContainer.innerHTML = ''; 
+        }
+        updateThumbnails();
+        if (!isPaused && !image.isText) {
+            speakText(image.text);
+        }
     }
-    updateThumbnails();
-    if (!isPaused && !image.isText) {
-        speakText(image.text);
-    }
-
 
     async function speakText(text) {
         if (isSpeaking && currentUtterance) {
