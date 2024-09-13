@@ -24,8 +24,8 @@ Papa.parse("data.csv", {
     header: true,
     complete: function(results) {
         slides = results.data.map(row => ({
-            src: `images/${row.src}`, // Képek az "images" mappából
-            text: row.text // Szöveg a CSV-ből
+            src: `images/image${i + 1}.png`, // Kép elérési útja
+            text: `Ez a(z) ${i + 1}. kép. <span class="highlight">Ez kiemelt szöveg.</span>`
         }));
         generateThumbnails();
         showSlide(0); // Első kép megjelenítése
