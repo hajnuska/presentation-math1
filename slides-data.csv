@@ -1,0 +1,4 @@
+index,src,text
+1,image1.jpg,"Most megnézzük, mit jelentenek ezek az aláhúzott kifejezések. <span class='highlight'>Ez kiemelt szöveg.</span>"
+2,image2.jpg,"Ez most lehet, bonyolultnak tünik <span class='highlight'>Ez kiemelt szöveg.</span>"
+3,image3.jpg,"de elképzelhető, hogy könnyen megérted <span class='highlight'>Ez kiemelt szöveg.</span>"
