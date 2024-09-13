@@ -1,13 +1,13 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('https://github.com/hajnus/presentation-with-image-text/blob/main/data.csv')
+    fetch('https://raw.githubusercontent.com/hajnus/presentation-with-image-text/main/data.csv')
         .then(response => response.text())
         .then(text => Papa.parse(text, {
             header: true,
             complete: (results) => {
                 const images = results.data.map(row => ({
-                    src: `https://github.com/hajnus/presentation-with-image-text/raw/main/images/${row.src}`, // Frissítve a helyes URL
+                    src: `https://raw.githubusercontent.com/hajnus/presentation-with-image-text/main/images/${row.src}`,
                     text: row.text
                 }));
 
