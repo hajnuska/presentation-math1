@@ -63,7 +63,7 @@ function centerThumbnail(index) {
 function showSlide(index) {
     currentIndex = index;
     currentImage.src = images[currentIndex].src;
-    currentText.innerHTML = images[currentIndex].text;
+    // currentText.innerHTML = images[currentIndex].text;
     updateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
