@@ -23,7 +23,7 @@ async function fetchCSV() {
     const rows = text.split('\n').slice(1); // Az első sor a fejléc
     images = rows.map(row => {
         const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-        return { index: parseInt(index, 10), src: `images/${src}`, text };
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
     }).filter(image => image.index); // Eltávolítjuk az üres sorokat
     generateThumbnails();
     showSlide(currentIndex);
