@@ -36,16 +36,11 @@ async function generateThumbnails() {
     thumbnailsContainer.innerHTML = '';
     for (const [index, image] of images.entries()) {
         const thumb = document.createElement('div');
-        thumb.style.width = '100px';
-        thumb.style.height = '60px';
-        thumb.style.backgroundColor = 'gray';
-        thumb.style.margin = '0 5px';
-        thumb.style.cursor = 'pointer';
         thumb.dataset.index = index;
 
         // Ha a thumb éppen aktív, jelöljük ki
         if (index === currentIndex) {
-            thumb.style.border = '5px solid black';
+            thumb.classList.add('active');
         }
 
         thumb.addEventListener('click', () => handleNavigation(index));
