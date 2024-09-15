@@ -105,6 +105,8 @@ async function speakText(text) {
     const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
     utterance.lang = 'hu-HU';
     utterance.rate = speechSpeed;
+    
+    // If the text contains SSML or HTML tags
     const voices = await getVoices();
     const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
     if (maleVoice) {
@@ -116,11 +118,14 @@ async function speakText(text) {
             nextSlide();
         }
     };
+    utterance.onerror = (event) => {
+        console.error("Speech synthesis error:", event.error);
+        isSpeaking = false;
+    };
     speechSynthesis.speak(utterance);
     currentUtterance = utterance;
     isSpeaking = true;
 }
-
 async function getVoices() {
     return new Promise(resolve => {
         const interval = setInterval(() => {
