@@ -1,5 +1,6 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
+// Beállítja a PDF.js munkavállaló forrást
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 const currentImage = document.getElementById('currentImage');
@@ -70,34 +71,29 @@ async function showSlide(index) {
             // PDF betöltése
             const loadingTask = pdfjsLib.getDocument(pdfUrl);
             const pdf = await loadingTask.promise;
-            const page = await pdf.getPage(currentIndex + 1);  // Aktuális oldal betöltése
-            const scale = 1.5;
-            const viewport = page.getViewport({ scale });
 
-            // Canvas létrehozása és beállítása
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            document.querySelector('.image-container').innerHTML = ''; // Ürítse ki a container-t
-            document.querySelector('.image-container').appendChild(canvas);
-
-            // PDF renderelése a canvas-ra
-            const renderContext = {
-                canvasContext: context,
-                viewport: viewport
-            };
-            await page.render(renderContext).promise;
-
-            // Canvas adat URL beállítása
-            currentImage.src = canvas.toDataURL();
-            
-            // Thumbnail kiválasztás frissítése
-            updateThumbnailSelection();
-            
-            // Szöveg felolvasása
-            speakText(images[currentIndex].text);
-
+            // Ellenőrzi az oldalszámot
+            const pageIndex = 1; // Tesztoldal, lehet változtatni
+            if (pageIndex <= pdf.numPages) {
+                const page = await pdf.getPage(pageIndex);
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                document.querySelector('.image-container').innerHTML = '';
+                document.querySelector('.image-container').appendChild(canvas);
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                await page.render(renderContext).promise;
+                currentImage.src = canvas.toDataURL();
+                updateThumbnailSelection();
+            } else {
+                console.error("A megadott oldal indexe nem létezik:", pageIndex);
+            }
         } catch (error) {
             console.error("Hiba a PDF betöltésekor:", error);
         }
