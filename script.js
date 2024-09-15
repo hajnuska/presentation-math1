@@ -1,3 +1,5 @@
+console.log("A script.js fájl sikeresen betöltődött.");
+
 // Tesztkép URL-je
 const testImageUrl = 'https://via.placeholder.com/150';
 
