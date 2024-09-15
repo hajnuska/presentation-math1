@@ -7,28 +7,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        #slideshow {
-            text-align: center;
-        }
-        .image-container img {
-            width: 85vw;
-            max-width: 1000px;
-            height: auto;
-        }
-        .thumbnails-wrapper {
-            width: 85vw;
-            overflow-x: auto;
-            margin: 0 auto;
-            white-space: nowrap;
-            background-color: #f0f0f0;
-        }
-        .thumbnails div {
-    width: 30px; /* 50% a magassághoz képest, ami 60px */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+#slideshow {
+    text-align: center;
+}
+.image-container img {
+    width: 85vw;
+    max-width: 1000px;
+    height: auto;
+}
+.thumbnails-wrapper {
+    width: 85vw;
+    overflow-x: auto;
+    margin: 0 auto;
+    white-space: nowrap;
+    background-color: #f0f0f0;
+}
+.thumbnails {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+    position: relative;
+}
+.thumbnails div {
+    width: 30px; /* 50% a magassághoz képest */
     height: 60px;
     background-color: lightgray;
     margin: 0 5px;
@@ -36,11 +42,9 @@
     border-radius: 5px;
     position: relative;
 }
-
 .thumbnails div.active {
     border: none; /* Törli a kék keretet */
 }
-
 .thumbnails div::after {
     content: "";
     display: block;
@@ -52,45 +56,40 @@
     left: 0;
     border-radius: 0 0 5px 5px; /* Lekerekített alsó sarkok */
 }
-        
-        .custom-dropdown select {
-            padding: 10px;
-            font-size: 16px;
-            border: 4px solid #a8a8a8;
-            border-radius: 15px;
-            background-color: #e0e0e0;
-            color: black;
-            appearance: none;
-            outline: none;
-        }
-        /*.custom-dropdown select:focus {
-            border-color: #e0e0e0;
-            box-shadow: 0 0 10px rgba(0, 206, 209, 0.5);
-        }*/
-        #speedValue {
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        button {
-            border: none;
-            border-radius: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            text-transform: uppercase;
-            vertical-align: middle;
-            display: inline-block;
-            margin: 5px;
-            background-color: lightgreen;
-            color: black;
-        }
-        button:hover {
-            transform: scale(1.1);
-            font-weight: bold;
-        }
-        .small-text {
-            font-size: 0.8em;
-            font-weight: normal;
-        }
+.custom-dropdown select {
+    padding: 10px;
+    font-size: 16px;
+    border: 4px solid #a8a8a8;
+    border-radius: 15px;
+    background-color: #e0e0e0;
+    color: black;
+    appearance: none;
+    outline: none;
+}
+#speedValue {
+    font-weight: bold;
+    margin-left: 10px;
+}
+button {
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    display: inline-block;
+    margin: 5px;
+    background-color: lightgreen;
+    color: black;
+}
+button:hover {
+    transform: scale(1.1);
+    font-weight: bold;
+}
+.small-text {
+    font-size: 0.8em;
+    font-weight: normal;
+}
     </style>
 </head>
 <body>
