@@ -21,10 +21,11 @@ async function fetchCSV() {
     const response = await fetch('data.csv');
     const text = await response.text();
     const rows = text.split('\n').slice(1); // Az első sor a fejléc
-    images = rows.map(row => {
-         const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-         return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
-    });.filter(image => image.index); // Eltávolítjuk az üres sorokat
+    // PDF fájlok elérési útjának helyesítése
+images = rows.map(row => {
+     const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
+     return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.pdf`, text };
+}).filter(image => image.index); // Eltávolítjuk az üres sorokat
     generateThumbnails();
     showSlide(currentIndex);
 }
@@ -59,11 +60,10 @@ function centerThumbnail(index) {
     thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
 }
 
-// Diavetítés frissítése
+// PDF megjelenítéshez a <img> helyett <iframe>-et használunk
 function showSlide(index) {
     currentIndex = index;
-    currentImage.src = images[currentIndex].src;
-    // currentText.innerHTML = images[currentIndex].text;
+    currentImage.outerHTML = `<iframe id="currentImage" src="${images[currentIndex].src}" width="85%" height="600px"></iframe>`;
     updateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
