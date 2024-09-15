@@ -1,15 +1,15 @@
 index,scr,text
 1,image1.pdf,Szöveges feladat. Arányosítással. Az egésznek ez hányad része. hogyan aránylik az egyik. a másikhoz
-2,image2.pdf,"A nekeresdi gimnázium 9. b osztályában a tanulók negyede bejáró,"
-3,image3.pdf,"harmadrésze kollégista,"
+2,image2.pdf,"A nekeresdi gimnázium 9. b osztályában a tanulók negyede bejáró"
+3,image3.pdf,"harmadrésze kollégista"
 4,image4.pdf,15-en pedig Nekeresden laknak (tehát nem bejárók és nem kollégisták).
-5,image5.pdf,"Kezdjük azzal hogy kiemeljük az adatokat. Vegyünk elő két színes ceruzát!  Én most zöldet fogok használni"
-6,image6.pdf,"Észrevehetjük, hogy a tanulók egynegyede"
-7,image7.pdf,"bejáró, a tanulók egy harmadrésze"
-8,image8.pdf,"kollégista, és 15-en pedig"
+5,image5.pdf,"Kezdjük azzal. hogy kiemeljük az adatokat. Vegyünk elő két színes ceruzát!  Én most zöldet fogok használni"
+6,image6.pdf,"Észrevehetjük. hogy a tanulók egynegyede"
+7,image7.pdf,"bejáró. a tanulók egy harmadrésze"
+8,image8.pdf,"kollégista. és 15-en pedig"
 9,image9.pdf,Nekeresden laknak. 3 kérdést kaptunk. Jelöljük ki a kérdésekben is
-10,image10.pdf,"A fontos elemeket. Ha a kérdésben lévő dologról van bármi adatunk, akkor azt jelöljük ugyanazzal a színnel, amit az előbb használtunk,"
-11,image11.pdf,"Én a zöldet használtam, folytatom is ezzel. amiről pedig nincs adatunk. azt jelöljük pirossal"
+10,image10.pdf,"A fontos elemeket. Ha a kérdésben lévő dologról van bármi adatunk. akkor azt jelöljük ugyanazzal a színnel. amit az előbb használtunk"
+11,image11.pdf,"Én a zöldet használtam. folytatom is ezzel. amiről pedig nincs adatunk. azt jelöljük pirossal"
 12,image12.pdf,Lássuk is az első kérdést
 13,image13.pdf,Az osztály
 14,image14.pdf,hányad részét
@@ -17,19 +17,19 @@ index,scr,text
 16,image16.pdf,és a kollégisták
 17,image17.pdf,Összesen.
 18,image18.pdf,Itt fontos adatok lesznek a hányad részét
-19,image19.pdf,"és az összesen, mert a műveletekre utalnak (hányad-szorzás, összesen-összeadás)"
+19,image19.pdf,"és az összesen. mert a műveletekre utalnak (hányad-szorzás. összesen-összeadás)"
 20,image20.pdf,Lássuk a következő kérdést. Mennyi a kollégisták
 21,image21.pdf,És a bejárók
 22,image22.pdf,Számának az aránya
-23,image23.pdf,"Itt fontos kifejezés, az aránya,"
-24,image24.pdf,"mert ez mutatja meg, hogy itt osztással kell majd dolgozni. Utolsó kérdés. Hány tanulója van"
+23,image23.pdf,"Itt fontos kifejezés. az aránya."
+24,image24.pdf,"mert ez mutatja meg. hogy itt osztással kell majd dolgozni. Utolsó kérdés. Hány tanulója van"
 25,image25.pdf,Van A nekeresdi gimnázium kielncedik bé osztályának.
-26,image26.pdf,"Vagyis, összesen mennyi gyerek jár az osztályba. Rendben, a kérdéseket kielemeztük, nézzük át újra"
-27,image27.pdf,"a feladat szövegét. Most írjuk ki az adatokat a feladat szövegéből. a tanulók létszámát nem tudjuk,"
-28,image28.pdf,"de az látható, hogy több adatot is ez alapján határoztak meg, ezért nevezzük el: iksznek. Az első konkrétabb adatunk, hogy a tanulók negyede bejárós"
-29,image29.pdf,"ezt iksz per néggyel tudjuk jelölni, hiszen az ikszet osztjuk néggyel, mert az iksz az osztálylétszám. Tudjuk azt is, hogy a tanulók harmadrésze kollégista,"
-30,image30.pdf,"ezt iksz vagy iksz per hárommal tudjuk leírni, hiszen az ikszet osztjuk hárommal, mert az iksz az osztálylétszám. 15-en pedig Nekeresden laknak,"
-31,image31.pdf,"Ezt egyszerűen 15-nek írjuk. Ha jól figyeltünk, látjuk, hogy az osztályba járó valamennyi gyermek elhelyezését megadták, mert van aki messze lakik, ők a bejárók,"
+26,image26.pdf,"Vagyis. összesen mennyi gyerek jár az osztályba. Rendben. a kérdéseket kielemeztük. nézzük át újra"
+27,image27.pdf,"a feladat szövegét. Most írjuk ki az adatokat a feladat szövegéből. a tanulók létszámát nem tudjuk."
+28,image28.pdf,"de az látható. hogy több adatot is ez alapján határoztak meg. ezért nevezzük el: iksznek. Az első konkrétabb adatunk. hogy a tanulók negyede bejárós"
+29,image29.pdf,"ezt iksz per néggyel tudjuk jelölni. hiszen az ikszet osztjuk néggyel. mert az iksz az osztálylétszám. Tudjuk azt is. hogy a tanulók harmadrésze kollégista"
+30,image30.pdf,"ezt iksz vagy iksz per hárommal tudjuk leírni. hiszen az ikszet osztjuk hárommal. mert az iksz az osztálylétszám. 15-en pedig Nekeresden laknak."
+31,image31.pdf,"Ezt egyszerűen 15-nek írjuk. Ha jól figyeltünk, látjuk, hogy az osztályba járó valamennyi gyermek elhelyezését megadták, mert van aki messze lakik, ők a bejárók."
 32,image32.pdf,"van, aki az iskola kollégiumában lakik, ők a kollégisták,"
 33,image33.pdf,"és vannak, akik olyan szerencsések, hogy Nekeresden laknak."
 34,image34.pdf,"Tehát az ő számunkak az összege lesz egyenlő azt osztály létszámával, vagyis iksszel. Ez alapján mostmár fel tudjuk írni az adatokat egyenletbe. Iksz egyenlő"
