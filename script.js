@@ -26,7 +26,7 @@ async function fetchCSV() {
     const rows = text.split('\n').slice(1);
     images = rows.map(row => {
         const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.pdf`, text };
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
     }).filter(image => image.index);
     generateThumbnails();
     showSlide(currentIndex);
@@ -35,29 +35,22 @@ async function fetchCSV() {
 async function generateThumbnails() {
     thumbnailsContainer.innerHTML = '';
     for (const [index, image] of images.entries()) {
-        const thumb = document.createElement('img');
-        thumb.src = await generatePDFThumbnail(image.src, 1);
+        const thumb = document.createElement('div');
+        thumb.style.width = '100px';
+        thumb.style.height = '60px';
+        thumb.style.backgroundColor = 'gray';
+        thumb.style.margin = '0 5px';
+        thumb.style.cursor = 'pointer';
         thumb.dataset.index = index;
+
+        // Ha a thumb éppen aktív, jelöljük ki
+        if (index === currentIndex) {
+            thumb.style.border = '5px solid black';
+        }
+
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
     }
-}
-
-async function generatePDFThumbnail(pdfUrl, pageNumber) {
-    const loadingTask = pdfjsLib.getDocument(pdfUrl);
-    const pdf = await loadingTask.promise;
-    const page = await pdf.getPage(pageNumber);
-    const scale = 0.2;
-    const viewport = page.getViewport({ scale });
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    await page.render({
-        canvasContext: context,
-        viewport: viewport
-    }).promise;
-    return canvas.toDataURL();
 }
 
 function centerThumbnail(index) {
@@ -71,11 +64,12 @@ function centerThumbnail(index) {
 function showSlide(index) {
     currentIndex = index;
     currentImage.src = images[currentIndex].src;
-    generateThumbnails();
+    generateThumbnails();  // Újratöltjük a thumbnail-eket, hogy frissüljön a kijelölés
     if (!isPaused) {
         speakText(images[currentIndex].text);
     }
 }
+
 
 async function speakText(text) {
     if (isSpeaking && currentUtterance) {
@@ -92,7 +86,7 @@ async function speakText(text) {
     utterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
-            nextSlide();
+            nextSlide();  // Amikor vége a felolvasásnak, automatikusan lép a következő diára
         }
     };
     speechSynthesis.speak(utterance);
