@@ -21,15 +21,20 @@ let currentUtterance = null;
 let speechSpeed = 1.0;
 
 async function fetchCSV() {
-    const response = await fetch('https://raw.githubusercontent.com/hajnuska/presentation-math1/main/data.csv');
-    const text = await response.text();
-    const rows = text.split('\n').slice(1);
-    images = rows.map(row => {
-        const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
-    }).filter(image => image.index);
-    generateThumbnails();
-    showSlide(currentIndex);
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/hajnuska/presentation-math1/main/data.csv');
+        const text = await response.text();
+        const rows = text.split('\n').slice(1);
+        images = rows.map(row => {
+            const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
+            return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
+        }).filter(image => image.index);
+        console.log("Images:", images);
+        generateThumbnails();
+        showSlide(currentIndex);
+    } catch (error) {
+        console.error("Hiba a CSV betöltésekor:", error);
+    }
 }
 
 async function generateThumbnails() {
@@ -62,11 +67,55 @@ function centerThumbnail(index) {
 }
 
 function showSlide(index) {
-    currentIndex = index;
-    currentImage.src = images[currentIndex].src;
-    generateThumbnails();
-    if (!isPaused) {
-        speakText(images[currentIndex].text);
+    console.log("Show Slide Index:", index);
+    if (images[index]) {
+        currentIndex = index;
+        currentImage.src = images[currentIndex].src;
+        console.log("Current Image URL:", currentImage.src);
+        generateThumbnails();
+        if (!isPaused) {
+            speakText(images[currentIndex].text);
+        }
+    } else {
+        console.error("Nincs kép az indexen:", index);
+    }
+}
+
+async function showSlide(index) {
+    if (images[index]) {
+        currentIndex = index;
+        const pdfUrl = images[currentIndex].src;
+        try {
+            // PDF betöltése
+            const loadingTask = pdfjsLib.getDocument(pdfUrl);
+            const pdf = await loadingTask.promise;
+            const page = await pdf.getPage(1);  // Az első oldal betöltése
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
+
+            // Canvas létrehozása és beállítása
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            document.querySelector('.image-container').innerHTML = ''; // Ürítse ki a container-t
+            document.querySelector('.image-container').appendChild(canvas);
+
+            // PDF renderelése a canvas-ra
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            await page.render(renderContext).promise;
+
+            // Canvas adat URL beállítása
+            currentImage.src = canvas.toDataURL();
+
+        } catch (error) {
+            console.error("Hiba a PDF betöltésekor:", error);
+        }
+    } else {
+        console.error("Nincs kép az indexen:", index);
     }
 }
 
@@ -85,7 +134,7 @@ async function speakText(text) {
     utterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
-            nextSlide();
+            nextSlide();  // Amikor vége a felolvasásnak, automatikusan lép a következő diára
         }
     };
     speechSynthesis.speak(utterance);
