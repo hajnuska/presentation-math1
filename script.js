@@ -146,7 +146,8 @@ function goHome() {
 
 function updateSpeed() {
     speechSpeed = parseFloat(speedControl.value);
-    speedValueDisplay.textContent = `${(speechSpeed * 100).toFixed(0)}%`;
+    // Ezt a sort töröld vagy kommenteld ki, ha nem akarsz százalékot megjeleníteni
+    // speedValueDisplay.textContent = `${(speechSpeed * 100).toFixed(0)}%`;
 }
 
 document.addEventListener('DOMContentLoaded', fetchCSV);
