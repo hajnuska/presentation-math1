@@ -34,29 +34,29 @@ async function fetchCSV() {
 
 async function generateThumbnails() {
     thumbnailsContainer.innerHTML = '';
-    for (const [index, image] of images.entries()) {
+    for (const [index] of images.entries()) {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
 
-        // Hozzáadunk egy képet a thumbnailhez
-        const thumbImage = document.createElement('img');
-        thumbImage.src = image.src;
-        thumbImage.style.width = '100px';
-        thumbImage.style.height = '60px';
-        thumbImage.style.objectFit = 'cover'; // Kép megfelelő illeszkedése
-
-        thumb.appendChild(thumbImage);
+        // Thumbnail stílusok
+        thumb.style.width = '100px';
+        thumb.style.height = '60px';
+        thumb.style.backgroundColor = 'lightgray'; // Világos háttér
+        thumb.style.margin = '0 5px';
+        thumb.style.cursor = 'pointer';
+        thumb.style.borderRadius = '5px'; // Lekerekített sarkok
 
         // Ha a thumb éppen aktív, jelöljük ki
         if (index === currentIndex) {
-            thumb.classList.add('active');
+            thumb.style.border = '3px solid blue'; // Kijelölés színe
+        } else {
+            thumb.style.border = '1px solid gray'; // Nem aktív thumbnail stílus
         }
 
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
     }
 }
-
 
 function centerThumbnail(index) {
     const thumbnails = document.querySelectorAll('#thumbnails img');
@@ -74,7 +74,6 @@ function showSlide(index) {
         speakText(images[currentIndex].text);
     }
 }
-
 
 async function speakText(text) {
     if (isSpeaking && currentUtterance) {
