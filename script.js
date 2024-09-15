@@ -103,52 +103,53 @@ async function speakText(text) {
         speechSynthesis.cancel();
     }
 
-    const parts = text.split(/(\[break\])/); // Split by [break] tags
+    const parts = text.split(/(\[break\])/);
     const utterances = parts.map(part => new SpeechSynthesisUtterance(part));
 
-    utterances.forEach((utterance, index) => {
-        utterance.lang = 'hu-HU';
-        utterance.rate = speechSpeed;
-
-        const voices = getVoices();
+    try {
+        const voices = await getVoices();
         const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
-        if (maleVoice) {
-            utterance.voice = maleVoice;
-        }
 
-        utterance.onend = () => {
-            isSpeaking = false;
-            if (!isPaused) {
-                nextSlide();
+        utterances.forEach(utterance => {
+            utterance.lang = 'hu-HU';
+            utterance.rate = speechSpeed;
+            if (maleVoice) {
+                utterance.voice = maleVoice;
             }
-        };
-        
-        utterance.onerror = (event) => {
-            console.error("Speech synthesis error:", event.error);
-            isSpeaking = false;
-        };
-    });
 
-    // Function to speak utterances with delays
-    function speakUtterances(utterances) {
-        let delay = 0;
-
-        utterances.forEach((utterance, index) => {
-            setTimeout(() => {
-                speechSynthesis.speak(utterance);
-            }, delay);
-
-            // Update delay for [break] tags (considering 500ms for each [break])
-            if (parts[index].includes('[break]')) {
-                delay += 500;
-            }
+            utterance.onend = () => {
+                isSpeaking = false;
+                if (!isPaused) {
+                    nextSlide();
+                }
+            };
+            
+            utterance.onerror = (event) => {
+                console.error("Speech synthesis error:", event.error);
+                isSpeaking = false;
+            };
         });
 
-        // Set the isSpeaking flag
-        isSpeaking = true;
-    }
+        function speakUtterances(utterances) {
+            let delay = 0;
 
-    speakUtterances(utterances);
+            utterances.forEach((utterance, index) => {
+                setTimeout(() => {
+                    speechSynthesis.speak(utterance);
+                }, delay);
+
+                if (parts[index].includes('[break]')) {
+                    delay += 500;
+                }
+            });
+
+            isSpeaking = true;
+        }
+
+        speakUtterances(utterances);
+    } catch (error) {
+        console.error("Error during speech synthesis setup:", error);
+    }
 }
 
 function getVoices() {
