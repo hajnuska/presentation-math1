@@ -56,7 +56,29 @@
             font-weight: bold;
             color: red;
         }
+        
+#speedControl {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid cyan;
+    border-radius: 15px; /* Lekerekített szél */
+    background-color: #f0f0f0;
+    color: black;
+    appearance: none; /* Böngésző alapértelmezett stílusának eltávolítása */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
 
+#speedControl:focus {
+    outline: none;
+    border-color: #00ced1; /* Focus esetén a szín */
+}
+
+#speedValue {
+    font-weight: bold;
+    margin-left: 10px;
+}
+        
         button {
             border: none;
             border-radius: 15px;
