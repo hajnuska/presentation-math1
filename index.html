@@ -1,188 +1,125 @@
-console.log("A script.js fájl sikeresen betöltődött.");
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-
-const currentImage = document.getElementById('currentImage');
-const thumbnailsContainer = document.getElementById('thumbnails');
-const pauseButton = document.getElementById('pause');
-const resumeButton = document.getElementById('resume');
-const resetButton = document.getElementById('reset');
-const nextButton = document.getElementById('nextImage');
-const previousButton = document.getElementById('previousImage');
-const homeButton = document.getElementById('home');
-const speedControl = document.getElementById('speedControl');
-
-let images = [];
-let currentIndex = 0;
-let isPaused = false;
-let isSpeaking = false;
-let currentUtterance = null;
-let speechSpeed = 1.0;
-
-async function fetchCSV() {
-    try {
-        const response = await fetch('https://raw.githubusercontent.com/hajnuska/presentation-math1/main/data.csv');
-        const text = await response.text();
-        const rows = text.split('\n').slice(1);
-        images = rows.map(row => {
-            const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-            return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
-        }).filter(image => image.index);
-        console.log("Images:", images);
-        generateThumbnails();
-        showSlide(currentIndex);
-    } catch (error) {
-        console.error("Hiba a CSV betöltésekor:", error);
-    }
-}
-
-function generateThumbnails() {
-    thumbnailsContainer.innerHTML = '';
-    images.forEach((image, index) => {
-        const thumb = document.createElement('div');
-        thumb.dataset.index = index;
-        thumb.style.backgroundColor = 'lightgray';
-        thumb.style.width = '30px';
-        thumb.style.height = '60px';
-        thumb.style.cursor = 'pointer';
-        thumb.addEventListener('click', () => handleNavigation(index));
-        thumbnailsContainer.appendChild(thumb);
-    });
-    updateThumbnailSelection();
-}
-
-function updateThumbnailSelection() {
-    const thumbnails = document.querySelectorAll('#thumbnails div');
-    thumbnails.forEach((thumb, idx) => {
-        thumb.classList.toggle('active', idx === currentIndex);
-    });
-}
-
-async function showSlide(index) {
-    if (images[index]) {
-        currentIndex = index;
-        const pdfUrl = images[currentIndex].src;
-        try {
-            const loadingTask = pdfjsLib.getDocument(pdfUrl);
-            const pdf = await loadingTask.promise;
-            const pageIndex = 1;
-            if (pageIndex <= pdf.numPages) {
-                const page = await pdf.getPage(pageIndex);
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale });
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                document.querySelector('.image-container').innerHTML = '';
-                document.querySelector('.image-container').appendChild(canvas);
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                await page.render(renderContext).promise;
-                currentImage.src = canvas.toDataURL();
-                updateThumbnailSelection();
-            } else {
-                console.error("A megadott oldal indexe nem létezik:", pageIndex);
-            }
-        } catch (error) {
-            console.error("Hiba a PDF betöltésekor:", error);
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATEK - arányosítás</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
-    } else {
-        console.error("Nincs kép az indexen:", index);
-    }
-}
-
-async function speakText(text) {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel();
-    }
-    const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
-    utterance.lang = 'hu-HU';
-    utterance.rate = speechSpeed;
-    const voices = await getVoice();
-    const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
-    if (maleVoice) {
-        utterance.voice = maleVoice;
-    }
-    utterance.onend = () => {
-        isSpeaking = false;
-        if (!isPaused) {
-            nextSlide();
+        #slideshow {
+            text-align: center;
         }
-    };
-    speechSynthesis.speak(utterance);
-    currentUtterance = utterance;
-    isSpeaking = true;
-}
-
-async function getVoice() {
-    return new Promise(resolve => {
-        const interval = setInterval(() => {
-            const voices = speechSynthesis.getVoices();
-            if (voices.length) {
-                clearInterval(interval);
-                resolve(voices);
-            }
-        }, 100);
-    });
-}
-
-function handleNavigation(index) {
-    if (index >= 0 && index < images.length) {
-        showSlide(index);
-    }
-}
-
-function nextSlide() {
-    if (currentIndex < images.length - 1) {
-        showSlide(currentIndex + 1);
-    }
-}
-
-function previousSlide() {
-    if (currentIndex > 0) {
-        showSlide(currentIndex - 1);
-    }
-}
-
-function updateSpeed() {
-    speechSpeed = parseFloat(speedControl.value);
-    if (isSpeaking && currentUtterance) {
-        currentUtterance.rate = speechSpeed;
-    }
-}
-
-pauseButton.addEventListener('click', () => {
-    if (isSpeaking) {
-        speechSynthesis.pause();
-        isPaused = true;
-        pauseButton.style.display = 'none';
-        resumeButton.style.display = 'inline';
-    }
-});
-
-resumeButton.addEventListener('click', () => {
-    if (isPaused) {
-        speechSynthesis.resume();
-        isPaused = false;
-        resumeButton.style.display = 'none';
-        pauseButton.style.display = 'inline';
-    }
-});
-
-resetButton.addEventListener('click', () => {
-    showSlide(0);
-    if (isSpeaking) {
-        speechSynthesis.cancel();
-        isSpeaking = false;
-    }
-});
-
-nextButton.addEventListener('click', nextSlide);
-previousButton.addEventListener('click', previousSlide);
-homeButton.addEventListener('click', () => showSlide(0));
-speedControl.addEventListener('change', updateSpeed);
-
-fetchCSV();
+        .image-container img {
+            width: 85vw;
+            max-width: 1000px;
+            height: auto;
+        }
+        .thumbnails-wrapper {
+            width: 85vw;
+            overflow-x: auto;
+            margin: 0 auto;
+            white-space: nowrap;
+            background-color: #f0f0f0;
+        }
+        .thumbnails {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            position: relative;
+        }
+        .thumbnails div {
+            width: 50px;
+            height: 60px;
+            background-color: cyan;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: relative;
+        }
+        .thumbnails div.active::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 10px;
+            background-color: black;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-radius: 0 0 5px 5px;
+        }
+        .custom-dropdown select {
+            padding: 10px;
+            font-size: 16px;
+            border: 4px solid #a8a8a8;
+            border-radius: 15px;
+            background-color: #f0f0f0;
+            color: black;
+            appearance: none;
+            outline: none;
+        }
+        button {
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-transform: uppercase;
+            vertical-align: middle;
+            display: inline-block;
+            margin: 5px;
+            background-color: lightgreen;
+            color: black;
+        }
+        button:hover {
+            transform: scale(1.1);
+            font-weight: bold;
+        }
+        .small-text {
+            font-size: 0.8em;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div id="slideshow">
+        <div class="image-container">
+            <img id="currentImage" src="" alt="Slideshow Image">
+        </div>
+        <div class="thumbnails-wrapper">
+            <div class="thumbnails" id="thumbnails">
+                <!-- Thumbnails will be inserted here -->
+            </div>
+        </div>
+        <div class="controls">
+            <label for="speedControl">Speed Control:</label>
+            <div class="custom-dropdown" style="display: inline-block; margin-left: 10px;">
+                <select id="speedControl">
+                    <option value="0.2">0.25x</option>
+                    <option value="0.4">0.5x</option>
+                    <option value="0.6">0.75x</option>
+                    <option value="0.8" selected>1x</option>
+                    <option value="1">1.25x</option>
+                    <option value="1.2">1.5x</option>
+                    <option value="1.3">1.75x</option>
+                    <option value="1.4">2x</option>
+                </select>
+            </div> 
+        </div>
+        <div class="controls">
+            <button id="previousImage">Previous</button>
+            <button id="nextImage">Next</button>
+            <button id="pause">Pause</button>
+            <button id="resume"><span class="small-text">Resume</span> Play</button>
+            <button id="reset"><span class="small-text">Restart</span> Start</button>
+            <button id="home">Home</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
