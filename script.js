@@ -26,7 +26,7 @@ async function fetchCSV() {
     const rows = text.split('\n').slice(1);
     images = rows.map(row => {
         const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.jpg`, text };
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
     }).filter(image => image.index);
     generateThumbnails();
     showSlide(currentIndex);
@@ -37,29 +37,24 @@ async function generateThumbnails() {
     for (const [index] of images.entries()) {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
-
-        // Thumbnail stílusok
         thumb.style.width = '100px';
         thumb.style.height = '60px';
-        thumb.style.backgroundColor = 'lightgray'; // Világos háttér
+        thumb.style.backgroundColor = 'lightgray';
         thumb.style.margin = '0 5px';
         thumb.style.cursor = 'pointer';
-        thumb.style.borderRadius = '5px'; // Lekerekített sarkok
-
-        // Ha a thumb éppen aktív, jelöljük ki
+        thumb.style.borderRadius = '5px';
         if (index === currentIndex) {
-            thumb.style.border = '3px solid blue'; // Kijelölés színe
+            thumb.style.border = '3px solid blue';
         } else {
-            thumb.style.border = '1px solid gray'; // Nem aktív thumbnail stílus
+            thumb.style.border = '1px solid gray';
         }
-
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
     }
 }
 
 function centerThumbnail(index) {
-    const thumbnails = document.querySelectorAll('#thumbnails img');
+    const thumbnails = document.querySelectorAll('#thumbnails div');
     const thumbnailWidth = thumbnails[0].clientWidth;
     const thumbnailsWidth = thumbnailsContainer.clientWidth;
     const thumbnailPosition = thumbnails[index].offsetLeft;
@@ -69,7 +64,7 @@ function centerThumbnail(index) {
 function showSlide(index) {
     currentIndex = index;
     currentImage.src = images[currentIndex].src;
-    generateThumbnails();  // Újratöltjük a thumbnail-eket, hogy frissüljön a kijelölés
+    generateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
     }
@@ -90,7 +85,7 @@ async function speakText(text) {
     utterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
-            nextSlide();  // Amikor vége a felolvasásnak, automatikusan lép a következő diára
+            nextSlide();
         }
     };
     speechSynthesis.speak(utterance);
@@ -150,8 +145,6 @@ function goHome() {
 
 function updateSpeed() {
     speechSpeed = parseFloat(speedControl.value);
-    // Ezt a sort töröld vagy kommenteld ki, ha nem akarsz százalékot megjeleníteni
-    // speedValueDisplay.textContent = `${(speechSpeed * 100).toFixed(0)}%`;
 }
 
 document.addEventListener('DOMContentLoaded', fetchCSV);
