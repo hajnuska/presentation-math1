@@ -104,8 +104,8 @@ async function speakText(text) {
         speechSynthesis.cancel();
     }
 
-    const parts = text.split(/(\[break\])/);
-    const utterances = parts.map(part => new SpeechSynthesisUtterance(part.replace(/\[break\]/g, '')));
+    const parts = text.split(/(\[break\])/).filter(part => part.trim().length > 0); // Remove empty parts
+    const utterances = parts.map(part => new SpeechSynthesisUtterance(part));
 
     try {
         const voices = await getVoices();
@@ -124,10 +124,13 @@ async function speakText(text) {
                     nextSlide();
                 }
             };
-            
+
             utterance.onerror = (event) => {
                 console.error("Speech synthesis error:", event.error);
                 isSpeaking = false;
+                if (!isPaused && !isSlideChanging) {
+                    nextSlide();
+                }
             };
         });
 
@@ -140,7 +143,7 @@ async function speakText(text) {
                 }, delay);
 
                 if (index < utterances.length - 1 && parts[index].includes('[break]')) {
-                    delay += 500;
+                    delay += 500; // Add delay for breaks
                 }
             });
 
