@@ -67,6 +67,7 @@ function centerThumbnail(index) {
 }
 
 async function showSlide(index) {
+    console.log("Show Slide Index:", index);
     if (images[index]) {
         currentIndex = index;
         const pdfUrl = images[currentIndex].src;
@@ -96,7 +97,7 @@ async function showSlide(index) {
             // Canvas adat URL beállítása
             currentImage.src = canvas.toDataURL();
 
-            // Szöveg felolvasás indítása
+            // Felolvasás indítása
             if (!isPaused) {
                 speakText(images[currentIndex].text);
             }
