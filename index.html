@@ -109,17 +109,20 @@
     </style>
 </head>
 <body>
-    <div id="slideshow">
-        <div class="image-container">
-            <img id="currentImage" src="images/placeholder-image.jpg" alt="Slideshow Image">
+   <div id="slideshow">
+    <div class="image-container">
+        <img id="currentImage" src="images/placeholder-image.jpg" alt="Slideshow Image">
+    </div>
+    <div class="thumbnails-wrapper">
+        <div class="thumbnails" id="thumbnails">
+            <!-- Thumbnails will be inserted here -->
         </div>
-        <!-- <p id="currentText">Placeholder text goes here...</p> -->
-        <div class="thumbnails-wrapper">
-            <div class="thumbnails" id="thumbnails">
-                <!-- Thumbnails will be inserted here -->
-            </div>
-        </div>
-        <div class="controls">
+    </div>
+    <div class="controls">
+        <!-- Control buttons go here -->
+    </div>
+</div>
+    <div class="controls">
    <label for="speedControl">Sebesség:</label>
 <div class="custom-dropdown">
     <select id="speedControl">
