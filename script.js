@@ -133,13 +133,14 @@ function handleNavigation(index) {
     }
 }
 
+// Sebességválasztó (dropdown) figyelése
 const speedControl = document.getElementById('speedControl');
 const speedValueDisplay = document.getElementById('speedValue');
 let speechSpeed = 1.0; // Alapértelmezett sebesség
 
-speedControl.addEventListener('input', () => {
+speedControl.addEventListener('change', () => {
     speechSpeed = parseFloat(speedControl.value);
-    speedValueDisplay.textContent = `${speechSpeed}x`; // A sebesség kijelzése
+    speedValueDisplay.textContent = `${speechSpeed}x`; // A kijelzett sebesség frissítése
 });
 
 // Pause funkció
