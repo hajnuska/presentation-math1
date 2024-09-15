@@ -66,21 +66,6 @@ function centerThumbnail(index) {
     thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
 }
 
-function showSlide(index) {
-    console.log("Show Slide Index:", index);
-    if (images[index]) {
-        currentIndex = index;
-        currentImage.src = images[currentIndex].src;
-        console.log("Current Image URL:", currentImage.src);
-        generateThumbnails();
-        if (!isPaused) {
-            speakText(images[currentIndex].text);
-        }
-    } else {
-        console.error("Nincs kép az indexen:", index);
-    }
-}
-
 async function showSlide(index) {
     if (images[index]) {
         currentIndex = index;
@@ -110,6 +95,11 @@ async function showSlide(index) {
 
             // Canvas adat URL beállítása
             currentImage.src = canvas.toDataURL();
+
+            // Szöveg felolvasás indítása
+            if (!isPaused) {
+                speakText(images[currentIndex].text);
+            }
 
         } catch (error) {
             console.error("Hiba a PDF betöltésekor:", error);
