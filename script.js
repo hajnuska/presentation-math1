@@ -1,6 +1,5 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
-// Beállítja a PDF.js munkavállaló forrást
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 const currentImage = document.getElementById('currentImage');
@@ -43,7 +42,7 @@ async function generateThumbnails() {
     for (const [index] of images.entries()) {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
-        thumb.style.width = '30px'; // 50% a magassághoz képest
+        thumb.style.width = '30px';
         thumb.style.height = '60px';
         thumb.style.backgroundColor = 'lightgray';
         thumb.style.margin = '0 5px';
@@ -68,12 +67,9 @@ async function showSlide(index) {
         currentIndex = index;
         const pdfUrl = images[currentIndex].src;
         try {
-            // PDF betöltése
             const loadingTask = pdfjsLib.getDocument(pdfUrl);
             const pdf = await loadingTask.promise;
-
-            // Ellenőrzi az oldalszámot
-            const pageIndex = 1; // Tesztoldal, lehet változtatni
+            const pageIndex = 1;
             if (pageIndex <= pdf.numPages) {
                 const page = await pdf.getPage(pageIndex);
                 const scale = 1.5;
@@ -117,7 +113,7 @@ async function speakText(text) {
     utterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
-            nextSlide();  // Amikor vége a felolvasásnak, automatikusan lép a következő diára
+            nextSlide();
         }
     };
     speechSynthesis.speak(utterance);
