@@ -70,7 +70,7 @@ async function showSlide(index) {
             // PDF betöltése
             const loadingTask = pdfjsLib.getDocument(pdfUrl);
             const pdf = await loadingTask.promise;
-            const page = await pdf.getPage(1);  // Az első oldal betöltése
+            const page = await pdf.getPage(currentIndex + 1);  // Aktuális oldal betöltése
             const scale = 1.5;
             const viewport = page.getViewport({ scale });
 
@@ -94,6 +94,9 @@ async function showSlide(index) {
             
             // Thumbnail kiválasztás frissítése
             updateThumbnailSelection();
+            
+            // Szöveg felolvasása
+            speakText(images[currentIndex].text);
 
         } catch (error) {
             console.error("Hiba a PDF betöltésekor:", error);
