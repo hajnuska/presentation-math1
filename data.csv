@@ -1,9 +1,9 @@
 index,scr,text
-1,image1.pdf,"Szöveges feladat<break time='200ms'/>arányosítással<break time='500ms'/> részletes feladatmegoldás"
-2,image2.pdf,"A nekeresdi gimnázium 9. b osztályában <break time='1000ms'/>a tanulók negyede bejáró"
+1,image1.pdf,"Szöveges feladat [break] arányosítással [break] részletes feladatmegoldás"
+2,image2.pdf,"A nekeresdi gimnázium 9. b osztályában [break] a tanulók negyede bejáró"
 3,image3.pdf,"harmadrésze kollégista"
-4,image4.pdf,"15-en pedig Nekeresden laknak <break time='50ms'/>(tehát nem bejárók és nem kollégisták)."
-5,image5.pdf,"Kezdjük azzal<break time='50ms'/> hogy kiemeljük az adatokat.<break time='100ms'/> Vegyünk elő két színes ceruzát<break time='50ms'/>  Én most zöldet fogok használni"
+4,image4.pdf,"15-en pedig Nekeresden laknak [break] (tehát nem bejárók és nem kollégisták)."
+5,image5.pdf,"Kezdjük azzal[break]  hogy kiemeljük az adatokat.[break]  Vegyünk elő két színes ceruzát[break]   Én most zöldet fogok használni"
 6,image6.pdf,"Észrevehetjük. hogy a tanulók "
 7,image7.pdf,"egynegyede bejáró. a tanulók "
 8,image8.pdf,"egy harmadrésze kollégista. és "
