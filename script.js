@@ -1,5 +1,10 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
+function updateSpeed() {
+    speechSpeed = parseFloat(speedControl.value);
+    speedValueDisplay.textContent = `${speechSpeed}x`; // Csak a sebesség érték kiírása "x" jellel
+}
+
 // Elementek lekérése
 const currentImage = document.getElementById('currentImage');
 const thumbnailsContainer = document.getElementById('thumbnails');
