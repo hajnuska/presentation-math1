@@ -103,8 +103,9 @@ async function speakText(text) {
         speechSynthesis.cancel();
     }
 
-    const parts = text.split(/(\[break\])/);
-    const utterances = parts.map(part => new SpeechSynthesisUtterance(part));
+    // Split the text by custom break markers
+    const parts = text.split(/\[break\]/).filter(part => part.trim() !== '');
+    const utterances = parts.map(part => new SpeechSynthesisUtterance(part.trim()));
 
     try {
         const voices = await getVoices();
@@ -123,35 +124,35 @@ async function speakText(text) {
                     nextSlide();
                 }
             };
-            
+
             utterance.onerror = (event) => {
                 console.error("Speech synthesis error:", event.error);
                 isSpeaking = false;
             };
         });
 
-        function speakUtterances(utterances) {
-            let delay = 0;
+        let delay = 0;
 
+        // Function to speak utterances with delays
+        function speakUtterances() {
             utterances.forEach((utterance, index) => {
                 setTimeout(() => {
                     speechSynthesis.speak(utterance);
                 }, delay);
 
-                if (parts[index].includes('[break]')) {
-                    delay += 500;
+                // Add delay after a break
+                if (text.split(/\[break\]/)[index] === '[break]') {
+                    delay += 500; // 500ms delay
                 }
             });
-
             isSpeaking = true;
         }
 
-        speakUtterances(utterances);
+        speakUtterances();
     } catch (error) {
         console.error("Error during speech synthesis setup:", error);
     }
 }
-
 function getVoices() {
     return new Promise(resolve => {
         const interval = setInterval(() => {
