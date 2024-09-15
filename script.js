@@ -42,32 +42,27 @@ async function generateThumbnails() {
     for (const [index] of images.entries()) {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
-        thumb.style.width = '100px';
+        thumb.style.width = '30px'; // 50% a magassághoz képest
         thumb.style.height = '60px';
         thumb.style.backgroundColor = 'lightgray';
         thumb.style.margin = '0 5px';
         thumb.style.cursor = 'pointer';
         thumb.style.borderRadius = '5px';
-        if (index === currentIndex) {
-            thumb.style.border = '3px solid blue';
-        } else {
-            thumb.style.border = '1px solid gray';
-        }
+        thumb.style.position = 'relative';
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
     }
+    updateThumbnailSelection();
 }
 
-function centerThumbnail(index) {
+function updateThumbnailSelection() {
     const thumbnails = document.querySelectorAll('#thumbnails div');
-    const thumbnailWidth = thumbnails[0].clientWidth;
-    const thumbnailsWidth = thumbnailsContainer.clientWidth;
-    const thumbnailPosition = thumbnails[index].offsetLeft;
-    thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
+    thumbnails.forEach((thumb, idx) => {
+        thumb.classList.toggle('active', idx === currentIndex);
+    });
 }
 
 async function showSlide(index) {
-    console.log("Show Slide Index:", index);
     if (images[index]) {
         currentIndex = index;
         const pdfUrl = images[currentIndex].src;
@@ -96,11 +91,9 @@ async function showSlide(index) {
 
             // Canvas adat URL beállítása
             currentImage.src = canvas.toDataURL();
-
-            // Felolvasás indítása
-            if (!isPaused) {
-                speakText(images[currentIndex].text);
-            }
+            
+            // Thumbnail kiválasztás frissítése
+            updateThumbnailSelection();
 
         } catch (error) {
             console.error("Hiba a PDF betöltésekor:", error);
