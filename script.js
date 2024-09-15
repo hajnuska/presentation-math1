@@ -22,10 +22,10 @@ async function fetchCSV() {
     const text = await response.text();
     const rows = text.split('\n').slice(1); // Az első sor a fejléc
     // PDF fájlok elérési útjának helyesítése
-images = rows.map(row => {
-     const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-     return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.pdf`, text };
-}).filter(image => image.index); // Eltávolítjuk az üres sorokat
+    images = rows.map(row => {
+        const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.pdf`, text };
+    }).filter(image => image.index); // Eltávolítjuk az üres sorokat
     generateThumbnails();
     showSlide(currentIndex);
 }
@@ -33,7 +33,8 @@ images = rows.map(row => {
 function generateThumbnails() {
     images.forEach((image, index) => {
         const thumb = document.createElement('img');
-        thumb.src = image.src;
+        // Ha a thumbnail nem támogatja a PDF-et, helyettesítsd egy placeholder képpel
+        thumb.src = 'images/thumbnail-placeholder.jpg'; // Helyettesítő kép
         thumb.dataset.index = index; // Tároljuk az indexet a thumbnailen
         thumb.addEventListener('click', () => {
             handleNavigation(index);
@@ -63,13 +64,13 @@ function centerThumbnail(index) {
 // PDF megjelenítéshez a <img> helyett <iframe>-et használunk
 function showSlide(index) {
     currentIndex = index;
+    // A PDF fájlok megjelenítéséhez <iframe> használata
     currentImage.outerHTML = `<iframe id="currentImage" src="${images[currentIndex].src}" width="85%" height="600px"></iframe>`;
     updateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
     }
 }
-
 async function speakText(text) {
     if (isSpeaking && currentUtterance) {
         // Ha már beszélünk, állítsuk le az aktuális felolvasást
