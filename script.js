@@ -36,12 +36,15 @@ async function fetchCSV() {
     }
 }
 
-async function generateThumbnails() {
+function generateThumbnails() {
     thumbnailsContainer.innerHTML = '';
     images.forEach((image, index) => {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
         thumb.style.backgroundColor = 'lightgray';
+        thumb.style.width = '30px';
+        thumb.style.height = '60px';
+        thumb.style.cursor = 'pointer';
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
     });
