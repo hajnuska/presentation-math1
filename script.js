@@ -1,9 +1,5 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
-function updateSpeed() {
-    speechSpeed = parseFloat(speedControl.value);
-    speedValueDisplay.textContent = `${speechSpeed}x`; // Csak a sebesség érték kiírása "x" jellel
-}
 
 // Elementek lekérése
 const currentImage = document.getElementById('currentImage');
@@ -23,6 +19,11 @@ let isPaused = false;
 let isSpeaking = false; // Azt jelzi, hogy a szöveg felolvasása folyamatban van
 let currentUtterance = null; // Aktuális felolvasás tárolása
 let speechSpeed = 1.0; // Alapértelmezett sebesség
+
+function updateSpeed() {
+    speechSpeed = parseFloat(speedControl.value);
+    speedValueDisplay.textContent = `${speechSpeed}x`; // Csak a sebesség érték kiírása "x" jellel
+}
 
 // CSV fájl betöltése
 async function fetchCSV() {
