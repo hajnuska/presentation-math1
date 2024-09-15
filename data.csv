@@ -1,5 +1,5 @@
 index,scr,text
-1,image1.pdf,Szöveges feladat. Arányosítással. Az egésznek ez hányad része. hogyan aránylik az egyik. a másikhoz
+1,image1.pdf,"Szöveges feladat. Arányosítással. Az egésznek ez hányad része. hogyan aránylik az egyik. a másikhoz"
 2,image2.pdf,"A nekeresdi gimnázium 9. b osztályában a tanulók negyede bejáró"
 3,image3.pdf,"harmadrésze kollégista"
 4,image4.pdf,15-en pedig Nekeresden laknak (tehát nem bejárók és nem kollégisták).
@@ -29,9 +29,9 @@ index,scr,text
 28,image28.pdf,"de az látható. hogy több adatot is ez alapján határoztak meg. ezért nevezzük el: iksznek. Az első konkrétabb adatunk. hogy a tanulók negyede bejárós"
 29,image29.pdf,"ezt iksz per néggyel tudjuk jelölni. hiszen az ikszet osztjuk néggyel. mert az iksz az osztálylétszám. Tudjuk azt is. hogy a tanulók harmadrésze kollégista"
 30,image30.pdf,"ezt iksz vagy iksz per hárommal tudjuk leírni. hiszen az ikszet osztjuk hárommal. mert az iksz az osztálylétszám. 15-en pedig Nekeresden laknak."
-31,image31.pdf,"Ezt egyszerűen 15-nek írjuk. Ha jól figyeltünk, látjuk, hogy az osztályba járó valamennyi gyermek elhelyezését megadták, mert van aki messze lakik, ők a bejárók."
-32,image32.pdf,"van, aki az iskola kollégiumában lakik, ők a kollégisták,"
-33,image33.pdf,"és vannak, akik olyan szerencsések, hogy Nekeresden laknak."
+31,image31.pdf,"Ezt egyszerűen 15-nek írjuk. Ha jól figyeltünk. látjuk. hogy az osztályba járó valamennyi gyermek elhelyezését megadták. mert van aki messze lakik. ők a bejárók."
+32,image32.pdf,"van. aki az iskola kollégiumában lakik. ők a kollégisták."
+33,image33.pdf,"és vannak. akik olyan szerencsések. hogy Nekeresden laknak."
 34,image34.pdf,"Tehát az ő számunkak az összege lesz egyenlő azt osztály létszámával, vagyis iksszel. Ez alapján mostmár fel tudjuk írni az adatokat egyenletbe. Iksz egyenlő"
 35,image35.pdf,"Iksz per négy meg iksz per három meg 15 . Mivel az egyenletben egyszerű X-ek és számok szerepelnek, egyismeretlenes egyenletet kaptunk. "
 36,image36.pdf,"De hogyan tovább? vajon, mi legyen az első lépés? Van olyan, ami esetleg zavarja a szemünket? Nekem leginkább a törtes alakok."
