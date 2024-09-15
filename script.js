@@ -1,3 +1,5 @@
+const thumbnailsContainer = document.getElementById('thumbnails');
+
 console.log("A script.js fájl sikeresen betöltődött.");
 
 let images = [];
@@ -6,9 +8,9 @@ let isPaused = false;
 let isSpeaking = false; // Azt jelzi, hogy a szöveg felolvasása folyamatban van
 let currentUtterance = null; // Aktuális felolvasás tárolása
 
+const testImageUrl = 'https://via.placeholder.com/150';
 const currentImage = document.getElementById('currentImage');
 const currentText = document.getElementById('currentText');
-const thumbnailsContainer = document.getElementById('thumbnails');
 const pauseButton = document.getElementById('pause');
 const resumeButton = document.getElementById('resume');
 const resetButton = document.getElementById('reset');
@@ -33,8 +35,10 @@ async function fetchCSV() {
 function generateThumbnails() {
     images.forEach((image, index) => {
         const thumb = document.createElement('img');
-        // Ha a thumbnail nem támogatja a PDF-et, helyettesítsd egy placeholder képpel
-        thumb.src = 'images/thumbnail-placeholder.jpg'; // Helyettesítő kép
+        // Frissítsd ezt a sort:
+        // thumb.src = image.src;
+        // Erre:
+        thumb.src = testImageUrl; // Tesztkép URL-jét használjuk
         thumb.dataset.index = index; // Tároljuk az indexet a thumbnailen
         thumb.addEventListener('click', () => {
             handleNavigation(index);
@@ -64,8 +68,10 @@ function centerThumbnail(index) {
 // PDF megjelenítéshez a <img> helyett <iframe>-et használunk
 function showSlide(index) {
     currentIndex = index;
-    // A PDF fájlok megjelenítéséhez <iframe> használata
-    currentImage.outerHTML = `<iframe id="currentImage" src="${images[currentIndex].src}" width="85%" height="600px"></iframe>`;
+    // Frissítsd a következő sort:
+    // currentImage.src = images[currentIndex].src;
+    // Erre:
+    currentImage.src = testImageUrl; // Tesztkép URL-jét használjuk
     updateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
