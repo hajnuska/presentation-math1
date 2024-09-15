@@ -18,6 +18,7 @@ let isPaused = false;
 let isSpeaking = false;
 let currentUtterance = null;
 let speechSpeed = 1.0;
+let isSlideChanging = false; // Flag to prevent slide change during speech
 
 async function fetchCSV() {
     try {
@@ -103,8 +104,8 @@ async function speakText(text) {
         speechSynthesis.cancel();
     }
 
-    const parts = text.split(/\[break\]/).filter(part => part.trim() !== '');
-    const utterances = parts.map(part => new SpeechSynthesisUtterance(part.trim()));
+    const parts = text.split(/(\[break\])/);
+    const utterances = parts.map(part => new SpeechSynthesisUtterance(part.replace(/\[break\]/g, '')));
 
     try {
         const voices = await getVoices();
@@ -119,34 +120,34 @@ async function speakText(text) {
 
             utterance.onend = () => {
                 isSpeaking = false;
-                if (!isPaused) {
+                if (!isPaused && !isSlideChanging) {
                     nextSlide();
                 }
             };
-
+            
             utterance.onerror = (event) => {
                 console.error("Speech synthesis error:", event.error);
                 isSpeaking = false;
             };
         });
 
-        let delay = 0;
+        function speakUtterances(utterances) {
+            let delay = 0;
 
-        function speakUtterances() {
             utterances.forEach((utterance, index) => {
                 setTimeout(() => {
                     speechSynthesis.speak(utterance);
                 }, delay);
 
-                if (index < parts.length - 1) {  // Ensure we only add a delay if there's a [break]
-                    delay += 500;  // 500ms delay
+                if (index < utterances.length - 1 && parts[index].includes('[break]')) {
+                    delay += 500;
                 }
             });
 
             isSpeaking = true;
         }
 
-        speakUtterances();
+        speakUtterances(utterances);
     } catch (error) {
         console.error("Error during speech synthesis setup:", error);
     }
@@ -172,13 +173,19 @@ function handleNavigation(index) {
 
 function nextSlide() {
     if (currentIndex < images.length - 1) {
-        showSlide(currentIndex + 1);
+        isSlideChanging = true;
+        showSlide(currentIndex + 1).then(() => {
+            isSlideChanging = false;
+        });
     }
 }
 
 function previousSlide() {
     if (currentIndex > 0) {
-        showSlide(currentIndex - 1);
+        isSlideChanging = true;
+        showSlide(currentIndex - 1).then(() => {
+            isSlideChanging = false;
+        });
     }
 }
 
