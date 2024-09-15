@@ -11,7 +11,6 @@ const nextButton = document.getElementById('nextImage');
 const previousButton = document.getElementById('previousImage');
 const homeButton = document.getElementById('home');
 const speedControl = document.getElementById('speedControl');
-const speedValueDisplay = document.getElementById('speedValue');
 
 let images = [];
 let currentIndex = 0;
@@ -39,19 +38,13 @@ async function fetchCSV() {
 
 async function generateThumbnails() {
     thumbnailsContainer.innerHTML = '';
-    for (const [index] of images.entries()) {
+    images.forEach((image, index) => {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
-        thumb.style.width = '30px';
-        thumb.style.height = '60px';
         thumb.style.backgroundColor = 'lightgray';
-        thumb.style.margin = '0 5px';
-        thumb.style.cursor = 'pointer';
-        thumb.style.borderRadius = '5px';
-        thumb.style.position = 'relative';
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
-    }
+    });
     updateThumbnailSelection();
 }
 
@@ -151,36 +144,42 @@ function previousSlide() {
     }
 }
 
-function togglePause() {
-    isPaused = !isPaused;
-    pauseButton.style.display = isPaused ? 'none' : 'inline-block';
-    resumeButton.style.display = isPaused ? 'inline-block' : 'none';
-    if (isPaused) {
-        speechSynthesis.pause();
-    } else {
-        speechSynthesis.resume();
+function updateSpeed() {
+    speechSpeed = parseFloat(speedControl.value);
+    if (isSpeaking && currentUtterance) {
+        currentUtterance.rate = speechSpeed;
     }
 }
 
-function resetSlideshow() {
-    currentIndex = 0;
-    showSlide(currentIndex);
-}
+pauseButton.addEventListener('click', () => {
+    if (isSpeaking) {
+        speechSynthesis.pause();
+        isPaused = true;
+        pauseButton.style.display = 'none';
+        resumeButton.style.display = 'inline';
+    }
+});
 
-function goHome() {
-    location.href = 'index.html';
-}
+resumeButton.addEventListener('click', () => {
+    if (isPaused) {
+        speechSynthesis.resume();
+        isPaused = false;
+        resumeButton.style.display = 'none';
+        pauseButton.style.display = 'inline';
+    }
+});
 
-function updateSpeed() {
-    speechSpeed = parseFloat(speedControl.value);
-}
+resetButton.addEventListener('click', () => {
+    showSlide(0);
+    if (isSpeaking) {
+        speechSynthesis.cancel();
+        isSpeaking = false;
+    }
+});
 
-document.addEventListener('DOMContentLoaded', fetchCSV);
-pauseButton.addEventListener('click', togglePause);
-resumeButton.addEventListener('click', togglePause);
-resetButton.addEventListener('click', resetSlideshow);
 nextButton.addEventListener('click', nextSlide);
 previousButton.addEventListener('click', previousSlide);
-homeButton.addEventListener('click', goHome);
+homeButton.addEventListener('click', () => showSlide(0));
 speedControl.addEventListener('change', updateSpeed);
-speedControl.dispatchEvent(new Event('change'));
+
+fetchCSV();
