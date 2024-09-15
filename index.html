@@ -12,31 +12,26 @@
             padding: 0;
             overflow: hidden;
         }
-
         #slideshow {
             text-align: center;
         }
-
         .image-container img {
             width: 85vw;
             max-width: 1000px;
             height: auto;
         }
-
         .thumbnails-wrapper {
             width: 85vw;
             overflow-x: auto;
             margin: 0 auto;
             white-space: nowrap;
         }
-
         .thumbnails {
             display: inline-flex;
             align-items: center;
             margin-top: 10px;
             position: relative;
         }
-
         .thumbnails img {
             width: 100px;
             height: 60px;
@@ -44,20 +39,16 @@
             cursor: pointer;
             vertical-align: middle;
         }
-
         .thumbnails img.active {
             border-bottom: 10px solid black;
         }
-
         .controls {
             margin: 20px 0;
         }
-
         .highlight {
             font-weight: bold;
             color: red;
         }
-        
         .custom-dropdown select {
             padding: 10px;
             font-size: 16px;
@@ -70,21 +61,17 @@
             -moz-appearance: none;
             outline: none;
         }
-
         .custom-dropdown select:focus {
             border-color: #00ced1;
             box-shadow: 0 0 10px rgba(0, 206, 209, 0.5);
         }
-
         .custom-dropdown select option {
             border-radius: 12px;
         }
-
         #speedValue {
             font-weight: bold;
             margin-left: 10px;
         }
-        
         button {
             border: none;
             border-radius: 15px;
@@ -97,12 +84,10 @@
             background-color: pink;
             color: black;
         }
-
         button:hover {
             transform: scale(1.1);
             font-weight: bold;
         }
-
         .small-text {
             font-size: 0.8em;
             font-weight: normal;
@@ -119,22 +104,22 @@
                 <!-- Thumbnails will be inserted here -->
             </div>
         </div>
-<div class="controls">
-    <label for="speedControl">Speed Control:</label>
-    <div class="custom-dropdown" style="display: inline-block; margin-left: 10px;">
-        <select id="speedControl">
-            <option value="0.2">0.25x</option>
-            <option value="0.4">0.5x</option>
-            <option value="0.6">0.75x</option>
-            <option value="0.8" selected>1x</option>
-            <option value="1">1.25x</option>
-            <option value="1.2">1.5x</option>
-            <option value="1.3">1.75x</option>
-            <option value="1.4">2x</option>
-        </select>
-    </div> 
-    <span id="speedValue"></span>
-</div>
+        <div class="controls">
+            <label for="speedControl">Speed Control:</label>
+            <div class="custom-dropdown" style="display: inline-block; margin-left: 10px;">
+                <select id="speedControl">
+                    <option value="0.2">0.25x</option>
+                    <option value="0.4">0.5x</option>
+                    <option value="0.6">0.75x</option>
+                    <option value="0.8" selected>1x</option>
+                    <option value="1">1.25x</option>
+                    <option value="1.2">1.5x</option>
+                    <option value="1.3">1.75x</option>
+                    <option value="1.4">2x</option>
+                </select>
+            </div> 
+            <span id="speedValue"></span>
+        </div>
         <div class="controls">
             <button id="previousImage">Previous</button>
             <button id="nextImage">Next</button>
