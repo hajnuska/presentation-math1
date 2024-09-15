@@ -1,43 +1,45 @@
-const thumbnailsContainer = document.getElementById('thumbnails');
-
-console.log("A script.js fájl sikeresen betöltődött.");
-
-let images = [];
-let currentIndex = 0;
-let isPaused = false;
-let isSpeaking = false; // Azt jelzi, hogy a szöveg felolvasása folyamatban van
-let currentUtterance = null; // Aktuális felolvasás tárolása
-
+// Tesztkép URL-je
 const testImageUrl = 'https://via.placeholder.com/150';
+
+// Elementek lekérése
 const currentImage = document.getElementById('currentImage');
-const currentText = document.getElementById('currentText');
+const thumbnailsContainer = document.getElementById('thumbnails');
 const pauseButton = document.getElementById('pause');
 const resumeButton = document.getElementById('resume');
 const resetButton = document.getElementById('reset');
 const nextButton = document.getElementById('nextImage');
 const previousButton = document.getElementById('previousImage');
 const homeButton = document.getElementById('home');
+const speedControl = document.getElementById('speedControl');
+const speedValueDisplay = document.getElementById('speedValue');
+
+let images = [];
+let currentIndex = 0;
+let isPaused = false;
+let isSpeaking = false; // Azt jelzi, hogy a szöveg felolvasása folyamatban van
+let currentUtterance = null; // Aktuális felolvasás tárolása
+let speechSpeed = 1.0; // Alapértelmezett sebesség
+
+// Tesztkép beállítása
+currentImage.src = testImageUrl;
 
 // CSV fájl betöltése
 async function fetchCSV() {
     const response = await fetch('data.csv');
     const text = await response.text();
     const rows = text.split('\n').slice(1); // Az első sor a fejléc
-    // PDF fájlok elérési útjának helyesítése
     images = rows.map(row => {
         const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.pdf`, text };
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.jpg`, text };
     }).filter(image => image.index); // Eltávolítjuk az üres sorokat
     generateThumbnails();
     showSlide(currentIndex);
 }
 
 function generateThumbnails() {
+    thumbnailsContainer.innerHTML = ''; // Tisztítjuk a tartalmat
     images.forEach((image, index) => {
         const thumb = document.createElement('img');
-        // Frissítsd ezt a sort:
-        // thumb.src = image.src;
-        // Erre:
         thumb.src = testImageUrl; // Tesztkép URL-jét használjuk
         thumb.dataset.index = index; // Tároljuk az indexet a thumbnailen
         thumb.addEventListener('click', () => {
@@ -48,7 +50,7 @@ function generateThumbnails() {
 }
 
 function updateThumbnails() {
-    const thumbnails = document.querySelectorAll('.thumbnails img');
+    const thumbnails = document.querySelectorAll('#thumbnails img');
     thumbnails.forEach((thumb, index) => {
         thumb.classList.toggle('active', index === currentIndex);
     });
@@ -56,7 +58,7 @@ function updateThumbnails() {
 }
 
 function centerThumbnail(index) {
-    const thumbnails = document.querySelectorAll('.thumbnails img');
+    const thumbnails = document.querySelectorAll('#thumbnails img');
     const thumbnailWidth = thumbnails[0].clientWidth;
     const thumbnailsWidth = thumbnailsContainer.clientWidth;
     const thumbnailPosition = thumbnails[index].offsetLeft;
@@ -65,18 +67,16 @@ function centerThumbnail(index) {
     thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
 }
 
-// PDF megjelenítéshez a <img> helyett <iframe>-et használunk
 function showSlide(index) {
     currentIndex = index;
-    // Frissítsd a következő sort:
-    // currentImage.src = images[currentIndex].src;
-    // Erre:
-    currentImage.src = testImageUrl; // Tesztkép URL-jét használjuk
+    // Tesztkép URL-jét használjuk
+    currentImage.src = testImageUrl;
     updateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
     }
 }
+
 async function speakText(text) {
     if (isSpeaking && currentUtterance) {
         // Ha már beszélünk, állítsuk le az aktuális felolvasást
@@ -85,6 +85,7 @@ async function speakText(text) {
 
     const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, '')); // eltávolítjuk a HTML tageket
     utterance.lang = 'hu-HU';
+    utterance.rate = speechSpeed; // Sebesség beállítása
 
     const voices = await getVoice();
     const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
@@ -96,123 +97,79 @@ async function speakText(text) {
     utterance.onend = () => {
         isSpeaking = false; // Szöveg befejeződött
         if (!isPaused) {
-            nextSlide(); // Amint végez a felolvasással, automatikusan megy a következőre
+            nextSlide(); // Amint végez a felolvasással, lépjen a következő slide-ra
         }
     };
 
-    isSpeaking = true;
-    currentUtterance = utterance;
     speechSynthesis.speak(utterance);
+    currentUtterance = utterance;
+    isSpeaking = true;
 }
 
-function getVoice() {
+async function getVoice() {
     return new Promise(resolve => {
-        const voices = speechSynthesis.getVoices();
-        if (voices.length) {
-            resolve(voices);
-        } else {
-            speechSynthesis.onvoiceschanged = () => resolve(speechSynthesis.getVoices());
-        }
+        const interval = setInterval(() => {
+            const voices = speechSynthesis.getVoices();
+            if (voices.length) {
+                clearInterval(interval);
+                resolve(voices);
+            }
+        }, 100);
     });
 }
 
+function handleNavigation(index) {
+    if (index >= 0 && index < images.length) {
+        showSlide(index);
+    }
+}
+
 function nextSlide() {
-    if (!isPaused) {
-        currentIndex = (currentIndex + 1) % images.length;
-        showSlide(currentIndex);
+    if (currentIndex < images.length - 1) {
+        showSlide(currentIndex + 1);
     }
 }
 
 function previousSlide() {
-    if (!isPaused) {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showSlide(currentIndex);
+    if (currentIndex > 0) {
+        showSlide(currentIndex - 1);
     }
 }
 
-function handleNavigation(index) {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
-    }
-    showSlide(index);
-    if (!isPaused) {
-        speakText(images[index].text); // Az új kép szövegének felolvasása
+function togglePause() {
+    isPaused = !isPaused;
+    pauseButton.style.display = isPaused ? 'none' : 'inline-block';
+    resumeButton.style.display = isPaused ? 'inline-block' : 'none';
+
+    if (isPaused) {
+        speechSynthesis.pause();
+    } else {
+        speechSynthesis.resume();
     }
 }
 
-// Sebességválasztó (dropdown) figyelése
-const speedControl = document.getElementById('speedControl');
-const speedValueDisplay = document.getElementById('speedValue');
-let speechSpeed = 1.0; // Alapértelmezett sebesség
-
-speedControl.addEventListener('change', () => {
-    speechSpeed = parseFloat(speedControl.value);
-    speedValueDisplay.textContent = `${speechSpeed}x`; // A kijelzett sebesség frissítése
-});
-
-// Pause funkció
-pauseButton.addEventListener('click', () => {
-    isPaused = true;
-    pauseButton.classList.add('disabled'); // Pause gomb állapotának módosítása
-    resumeButton.classList.remove('disabled'); // Resume gomb engedélyezése
-    resetButton.classList.add('disabled'); // Reset gomb letiltása
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.pause(); // A felolvasás megállítása
-    }
-});
-
-// Resume funkció
-resumeButton.addEventListener('click', () => {
-    isPaused = false;
-    pauseButton.classList.remove('disabled'); // Pause gomb engedélyezése
-    resumeButton.classList.add('disabled'); // Resume gomb letiltása
-    resetButton.classList.remove('disabled'); // Reset gomb engedélyezése
-    if (!isSpeaking) {
-        speakText(images[currentIndex].text); // Az aktuális kép szövegének felolvasása
-    } else if (currentUtterance) {
-        speechSynthesis.resume(); // A felolvasás folytatása
-    }
-});
-
-// Reset funkció
-resetButton.addEventListener('click', () => {
-    isPaused = false;
+function resetSlideshow() {
     currentIndex = 0;
     showSlide(currentIndex);
-    pauseButton.classList.remove('disabled'); // Pause gomb engedélyezése
-    resumeButton.classList.add('disabled'); // Resume gomb letiltása
-    resetButton.classList.add('disabled'); // Reset gomb állapotának módosítása
-    if (!isSpeaking) {
-        nextSlide(); // Folytatás a következő képpel a reset után
-    }
-});
+}
 
-nextButton.addEventListener('click', () => {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
-    }
-    nextSlide();
-    if (!isPaused) {
-        speakText(images[currentIndex].text); // Az aktuális kép szövegének felolvasása
-    }
-});
+function goHome() {
+    // Navigáljunk a kezdő oldalra, vagy végezzünk el bármilyen más szükséges műveletet
+    location.href = 'index.html'; // Példa az aktuális oldal frissítésére
+}
 
-previousButton.addEventListener('click', () => {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
-    }
-    previousSlide();
-    if (!isPaused) {
-        speakText(images[currentIndex].text); // Az aktuális kép szövegének felolvasása
-    }
-});
+function updateSpeed() {
+    speechSpeed = parseFloat(speedControl.value);
+    speedValueDisplay.textContent = `${(speechSpeed * 100).toFixed(0)}%`;
+}
 
-homeButton.addEventListener('click', () => {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
-    }
-    window.location.href = 'index.html';
-});
-
-// Induláskor az első kép megjelenítése
+// Event listeners
 document.addEventListener('DOMContentLoaded', fetchCSV);
+pauseButton.addEventListener('click', togglePause);
+resumeButton.addEventListener('click', togglePause);
+resetButton.addEventListener('click', resetSlideshow);
+nextButton.addEventListener('click', nextSlide);
+previousButton.addEventListener('click', previousSlide);
+homeButton.addEventListener('click', goHome);
+speedControl.addEventListener('change', updateSpeed);
+speedControl.dispatchEvent(new Event('change')); // Initialize the speed display
