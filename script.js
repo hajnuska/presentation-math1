@@ -62,6 +62,7 @@ async function showSlide(index) {
     if (images[index]) {
         currentIndex = index;
         const pdfUrl = images[currentIndex].src;
+        const pdfText = images[currentIndex].text;
         try {
             const loadingTask = pdfjsLib.getDocument(pdfUrl);
             const pdf = await loadingTask.promise;
@@ -83,6 +84,9 @@ async function showSlide(index) {
                 await page.render(renderContext).promise;
                 currentImage.src = canvas.toDataURL();
                 updateThumbnailSelection();
+                if (pdfText) {
+                    await speakText(pdfText);
+                }
             } else {
                 console.error("A megadott oldal indexe nem létezik:", pageIndex);
             }
@@ -101,7 +105,7 @@ async function speakText(text) {
     const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
     utterance.lang = 'hu-HU';
     utterance.rate = speechSpeed;
-    const voices = await getVoice();
+    const voices = await getVoices();
     const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
     if (maleVoice) {
         utterance.voice = maleVoice;
@@ -117,7 +121,7 @@ async function speakText(text) {
     isSpeaking = true;
 }
 
-async function getVoice() {
+async function getVoices() {
     return new Promise(resolve => {
         const interval = setInterval(() => {
             const voices = speechSynthesis.getVoices();
