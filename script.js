@@ -103,7 +103,6 @@ async function speakText(text) {
         speechSynthesis.cancel();
     }
 
-    // Split the text by custom break markers
     const parts = text.split(/\[break\]/).filter(part => part.trim() !== '');
     const utterances = parts.map(part => new SpeechSynthesisUtterance(part.trim()));
 
@@ -133,18 +132,17 @@ async function speakText(text) {
 
         let delay = 0;
 
-        // Function to speak utterances with delays
         function speakUtterances() {
             utterances.forEach((utterance, index) => {
                 setTimeout(() => {
                     speechSynthesis.speak(utterance);
                 }, delay);
 
-                // Add delay after a break
-                if (text.split(/\[break\]/)[index] === '[break]') {
-                    delay += 500; // 500ms delay
+                if (index < parts.length - 1) {  // Ensure we only add a delay if there's a [break]
+                    delay += 500;  // 500ms delay
                 }
             });
+
             isSpeaking = true;
         }
 
@@ -153,6 +151,7 @@ async function speakText(text) {
         console.error("Error during speech synthesis setup:", error);
     }
 }
+
 function getVoices() {
     return new Promise(resolve => {
         const interval = setInterval(() => {
@@ -164,7 +163,6 @@ function getVoices() {
         }, 100);
     });
 }
-
 
 function handleNavigation(index) {
     if (index >= 0 && index < images.length) {
