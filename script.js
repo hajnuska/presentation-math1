@@ -26,7 +26,7 @@ async function fetchCSV() {
     const rows = text.split('\n').slice(1);
     images = rows.map(row => {
         const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/image${src}`, text };
     }).filter(image => image.index);
     generateThumbnails();
     showSlide(currentIndex);
