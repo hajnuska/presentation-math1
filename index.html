@@ -21,50 +21,43 @@
             height: auto;
         }
         .thumbnails-wrapper {
-    width: 85vw;
-    overflow-x: auto;
-    margin: 0 auto;
-    white-space: nowrap;
-    background-color: #f0f0f0; /* Világos háttérszín a görgetősáv mögött */
-}
-
-.thumbnails {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 10px;
-    position: relative;
-}
-
-.thumbnails div {
-    width: 100px;
-    height: 60px;
-    background-color: lightgray; /* Világos szürke háttér a thumbnail-eknek */
-    margin: 0 5px;
-    cursor: pointer;
-    vertical-align: middle;
-    border-radius: 5px; /* Lekerekített sarkok */
-}
-
-.thumbnails div.active {
-    border: 3px solid blue; /* Kijelölés színe */
-}
-        
+            width: 85vw;
+            overflow-x: auto;
+            margin: 0 auto;
+            white-space: nowrap;
+            background-color: #f0f0f0;
+        }
+        .thumbnails {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            position: relative;
+        }
+        .thumbnails div {
+            width: 100px;
+            height: 60px;
+            background-color: lightgray;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .thumbnails div.active {
+            border: 3px solid blue;
+        }
         .custom-dropdown select {
-    padding: 10px;
-    font-size: 16px;
-    border: 4px #a8a8a8; /* Vastagabb szegély */
-    border-radius: 15px;
-    background-color: #e0e0e0; /* Világos háttérszín */
-    color: black;
-    appearance: none;
-    outline: none;
-}
-
-.custom-dropdown select:focus {
-    border-color: #00ced1;
-    box-shadow: 0 0 10px rgba(0, 206, 209, 0.5);
-}
-        
+            padding: 10px;
+            font-size: 16px;
+            border: 4px solid #a8a8a8;
+            border-radius: 15px;
+            background-color: #e0e0e0;
+            color: black;
+            appearance: none;
+            outline: none;
+        }
+        .custom-dropdown select:focus {
+            border-color: #00ced1;
+            box-shadow: 0 0 10px rgba(0, 206, 209, 0.5);
+        }
         #speedValue {
             font-weight: bold;
             margin-left: 10px;
@@ -78,7 +71,7 @@
             vertical-align: middle;
             display: inline-block;
             margin: 5px;
-            background-color: lightgreen;
+            background-color: pink;
             color: black;
         }
         button:hover {
