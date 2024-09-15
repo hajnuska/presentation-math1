@@ -36,16 +36,16 @@ index,scr,text
 35,image35.pdf,"Iksz egyenlő ()Iksz per négy ()meg iksz per három ()meg 15 . ()Mivel az egyenletben egyszerű X-ek és számok szerepelnek ()egyismeretlenes egyenletet kaptunk. "
 36,image36.pdf,"De hogyan tovább? ()vajon. mi legyen az első lépés? ()Van olyan. ()ami esetleg zavarja a szemünket? ()Nekem leginkább a törtes alakok szúrtak szemet."
 37,image37.pdf,"pláne. hogy különböző a nevezőjük. ()Ha a nevezők nem egyeznek. ()akkor egy olyan számot kell talánunk. ()ami mindegyik nevezővel összehangolható. ()vagyis közös nevezőre hozzuk őket."
-38,image38.pdf,"Hogyan csináljuk ezt? ()Figyeljük meg. ()hogy a 4-nek és a 3-nak ()az 1-en kívül ()nincs közös osztója"
-39,image39.pdf,"így a közös nevezőjük könnyen kiszámolható. ()mert elég. ()ha egyszerűen csak összeszorozzuk őket"
-40,image40.pdf,"Itt a közös nevező tehát ()a 4 és a 3 szorzata lesz."
-41,image41.pdf,"Az első tört esetében a 4 van a nevezőben. ()ha ezt megszorzom 3-mal. 12-t kapok"
-42,image42.pdf,"a második tört esetében pedig 3 van a nevezőben. ()ha ezt megszorzom 4-gyel. ()szintén 12-t kapok"
-43,image43.pdf,"Viszont hogy a törtek értéke ne változzon. ()a számlálók értékét ugyanannyival kell szorozni. ()mint amennyivel a nevezőt szoroztuk."
-44,image44.pdf,"Mivel a nevezőkben lévő számokat csak össze kellett szoroznunk. ()így van egy gyors segítségünk. ()a közös nevező pillangója"
-45,image45.pdf,"aki segít megmutatni. ()hogy mi volt a nevezőknél a szorzó szám, ha nehezen tudunk rá emlékezni. "
-46,image46.pdf,"Az első tört számlálóját ()a második tört nevezőjével kell megszorozni ()tehát iksz szorozva 3-mal. "
-47,image47.pdf,"és a második tört számlálóját () Az első tört nevezőjével kell megszorozni"
+38,image38.pdf,"Hogyan csináljuk ezt? ()Fontos, hogy egy törtnek a számlálóját és nevezőjét is ugyanazzal a számmal kell majd megszoroznunk, hogy a tört értéke ne változzon. "
+39,image39.pdf,"Figyeljük meg. ()hogy a 4-nek és a 3-nak ()az 1-en kívül ()nincs közös osztója ()így a közös nevezőjük könnyen kiszámolható. ()mert elég. ()ha egyszerűen csak összeszorozzuk őket"
+40,image40.pdf,"Itt a közös nevező tehát ()a 4 és a 3 szorzata lesz, vagyis 12."
+41,image41.pdf,
+42,image42.pdf,
+43,image43.pdf,
+44,image44.pdf,"Mivel a nevezőkben lévő számokat csak össze kellett szoroznunk. ()így van egy gyors segítségünk. ()a közös nevezők pillangója"
+45,image45.pdf,"aki segít megmutatni. () hogy mit mivel kell szorozni 
+46,image46.pdf,"Az első tört számlálóját ()a második tört nevezőjével kell megszorozni ()tehát iksz szorozva 3-mal.
+47,image47.pdf,a második tört számlálóját pedig () Az első tört nevezőjével szorozzuk
 48,image48.pdf,"Végül lesz egy közös nevezőm() a 12"
 49,image49.pdf,"és a számlálóban két ikszes elemem"
 50,image50.pdf,"Három iksz meg négy iksz. a számlálóba került elemek mind ikszes tagok"
