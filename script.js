@@ -18,7 +18,6 @@ let isPaused = false;
 let isSpeaking = false;
 let currentUtterance = null;
 let speechSpeed = 1.0;
-let isSlideChanging = false; // Flag to prevent slide change during speech
 
 async function fetchCSV() {
     try {
@@ -104,53 +103,33 @@ async function speakText(text) {
         speechSynthesis.cancel();
     }
 
-    const parts = text.split(/(\[break\])/).filter(part => part.trim().length > 0); // Remove empty parts
-    const utterances = parts.map(part => new SpeechSynthesisUtterance(part));
-
+    const utterance = new SpeechSynthesisUtterance(text);
+    
     try {
         const voices = await getVoices();
         const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
 
-        utterances.forEach(utterance => {
-            utterance.lang = 'hu-HU';
-            utterance.rate = speechSpeed;
-            if (maleVoice) {
-                utterance.voice = maleVoice;
-            }
-
-            utterance.onend = () => {
-                isSpeaking = false;
-                if (!isPaused && !isSlideChanging) {
-                    nextSlide();
-                }
-            };
-
-            utterance.onerror = (event) => {
-                console.error("Speech synthesis error:", event.error);
-                isSpeaking = false;
-                if (!isPaused && !isSlideChanging) {
-                    nextSlide();
-                }
-            };
-        });
-
-        function speakUtterances(utterances) {
-            let delay = 0;
-
-            utterances.forEach((utterance, index) => {
-                setTimeout(() => {
-                    speechSynthesis.speak(utterance);
-                }, delay);
-
-                if (index < utterances.length - 1 && parts[index].includes('[break]')) {
-                    delay += 500; // Add delay for breaks
-                }
-            });
-
-            isSpeaking = true;
+        utterance.lang = 'hu-HU';
+        utterance.rate = speechSpeed;
+        if (maleVoice) {
+            utterance.voice = maleVoice;
         }
 
-        speakUtterances(utterances);
+        utterance.onend = () => {
+            isSpeaking = false;
+            if (!isPaused) {
+                nextSlide();
+            }
+        };
+
+        utterance.onerror = (event) => {
+            console.error("Speech synthesis error:", event.error);
+            isSpeaking = false;
+        };
+
+        speechSynthesis.speak(utterance);
+        isSpeaking = true;
+
     } catch (error) {
         console.error("Error during speech synthesis setup:", error);
     }
@@ -168,6 +147,7 @@ function getVoices() {
     });
 }
 
+
 function handleNavigation(index) {
     if (index >= 0 && index < images.length) {
         showSlide(index);
@@ -176,19 +156,13 @@ function handleNavigation(index) {
 
 function nextSlide() {
     if (currentIndex < images.length - 1) {
-        isSlideChanging = true;
-        showSlide(currentIndex + 1).then(() => {
-            isSlideChanging = false;
-        });
+        showSlide(currentIndex + 1);
     }
 }
 
 function previousSlide() {
     if (currentIndex > 0) {
-        isSlideChanging = true;
-        showSlide(currentIndex - 1).then(() => {
-            isSlideChanging = false;
-        });
+        showSlide(currentIndex - 1);
     }
 }
 
