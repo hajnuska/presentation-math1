@@ -19,6 +19,7 @@ let isSpeaking = false;
 let currentUtterance = null;
 let speechSpeed = 1.0;
 
+// Fetch CSV data and initialize the slideshow
 async function fetchCSV() {
     try {
         const response = await fetch('https://raw.githubusercontent.com/hajnuska/presentation-math1/main/data.csv');
@@ -36,6 +37,7 @@ async function fetchCSV() {
     }
 }
 
+// Generate thumbnails for navigation
 function generateThumbnails() {
     thumbnailsContainer.innerHTML = '';
     images.forEach((image, index) => {
@@ -51,6 +53,7 @@ function generateThumbnails() {
     updateThumbnailSelection();
 }
 
+// Update the visual selection of the current thumbnail
 function updateThumbnailSelection() {
     const thumbnails = document.querySelectorAll('#thumbnails div');
     thumbnails.forEach((thumb, idx) => {
@@ -58,6 +61,7 @@ function updateThumbnailSelection() {
     });
 }
 
+// Show the current slide and start speaking the text
 async function showSlide(index) {
     if (images[index]) {
         currentIndex = index;
@@ -98,74 +102,56 @@ async function showSlide(index) {
     }
 }
 
+// Speak the text and wait for the speech to end before moving to the next slide
 async function speakText(text) {
     if (isSpeaking && currentUtterance) {
         speechSynthesis.cancel();
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    currentUtterance.lang = 'hu-HU';
+    currentUtterance.rate = speechSpeed;
     
-    try {
-        const voices = await getVoices();
-        const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
-
-        utterance.lang = 'hu-HU';
-        utterance.rate = speechSpeed;
-        if (maleVoice) {
-            utterance.voice = maleVoice;
+    // Wait for the speech to finish before proceeding
+    currentUtterance.onend = () => {
+        isSpeaking = false;
+        if (!isPaused) {
+            nextSlide();
         }
+    };
+    
+    currentUtterance.onerror = (event) => {
+        console.error("Speech synthesis error:", event.error);
+        isSpeaking = false;
+    };
 
-        utterance.onend = () => {
-            isSpeaking = false;
-            if (!isPaused) {
-                nextSlide();
-            }
-        };
-
-        utterance.onerror = (event) => {
-            console.error("Speech synthesis error:", event.error);
-            isSpeaking = false;
-        };
-
-        speechSynthesis.speak(utterance);
-        isSpeaking = true;
-
-    } catch (error) {
-        console.error("Error during speech synthesis setup:", error);
-    }
+    // Speak the text
+    speechSynthesis.speak(currentUtterance);
+    isSpeaking = true;
 }
 
-function getVoices() {
-    return new Promise(resolve => {
-        const interval = setInterval(() => {
-            const voices = speechSynthesis.getVoices();
-            if (voices.length) {
-                clearInterval(interval);
-                resolve(voices);
-            }
-        }, 100);
-    });
-}
-
-
+// Handle navigation between slides
 function handleNavigation(index) {
     if (index >= 0 && index < images.length) {
         showSlide(index);
     }
 }
 
+// Move to the next slide after the speech ends
 function nextSlide() {
     if (currentIndex < images.length - 1) {
         showSlide(currentIndex + 1);
     }
 }
 
+// Move to the previous slide
 function previousSlide() {
     if (currentIndex > 0) {
         showSlide(currentIndex - 1);
     }
 }
 
+// Update speech rate from the speed control input
 function updateSpeed() {
     speechSpeed = parseFloat(speedControl.value);
     if (isSpeaking && currentUtterance) {
@@ -173,6 +159,7 @@ function updateSpeed() {
     }
 }
 
+// Add event listeners to control buttons
 pauseButton.addEventListener('click', () => {
     if (isSpeaking) {
         speechSynthesis.pause();
@@ -204,4 +191,5 @@ previousButton.addEventListener('click', previousSlide);
 homeButton.addEventListener('click', () => showSlide(0));
 speedControl.addEventListener('change', updateSpeed);
 
+// Initialize the presentation
 fetchCSV();
