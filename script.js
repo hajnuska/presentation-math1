@@ -25,38 +25,53 @@ currentImage.src = testImageUrl;
 
 // CSV fájl betöltése
 async function fetchCSV() {
-    const response = await fetch('data.csv');
+    const response = await fetch('https://raw.githubusercontent.com/hajnuska/presentation-math1/main/data.csv');
     const text = await response.text();
     const rows = text.split('\n').slice(1); // Az első sor a fejléc
     images = rows.map(row => {
         const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.jpg`, text };
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.pdf`, text };
     }).filter(image => image.index); // Eltávolítjuk az üres sorokat
     generateThumbnails();
     showSlide(currentIndex);
 }
 
-function generateThumbnails() {
+async function generateThumbnails() {
     thumbnailsContainer.innerHTML = ''; // Tisztítjuk a tartalmat
-    images.forEach((image, index) => {
+
+    for (const [index, image] of images.entries()) {
         const thumb = document.createElement('img');
-        thumb.src = testImageUrl; // Tesztkép URL-jét használjuk
+        thumb.src = await generatePDFThumbnail(image.src, 1); // Első oldal miniatűr
+
         thumb.dataset.index = index; // Tároljuk az indexet a thumbnailen
         thumb.addEventListener('click', () => {
             handleNavigation(index);
         });
+
         thumbnailsContainer.appendChild(thumb);
-    });
+    }
 }
 
-function updateThumbnails() {
-    const thumbnails = document.querySelectorAll('#thumbnails img');
-    thumbnails.forEach((thumb, index) => {
-        thumb.classList.toggle('active', index === currentIndex);
-    });
-    centerThumbnail(currentIndex); // Thumbnail sáv középre igazítása
-}
+async function generatePDFThumbnail(pdfUrl, pageNumber) {
+    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+    const pdf = await loadingTask.promise;
+    const page = await pdf.getPage(pageNumber);
 
+    const scale = 0.2; 
+    const viewport = page.getViewport({ scale });
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({
+        canvasContext: context,
+        viewport: viewport
+    }).promise;
+
+    return canvas.toDataURL(); // Visszaadja a canvas mintadat URL-t
+}
 function centerThumbnail(index) {
     const thumbnails = document.querySelectorAll('#thumbnails img');
     const thumbnailWidth = thumbnails[0].clientWidth;
