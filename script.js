@@ -25,9 +25,9 @@ async function fetchCSV() {
     const text = await response.text();
     const rows = text.split('\n').slice(1);
     images = rows.map(row => {
-    const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-    return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
-}).filter(image => image.index);
+        const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
+        return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}.jpg`, text };
+    }).filter(image => image.index);
     generateThumbnails();
     showSlide(currentIndex);
 }
@@ -38,6 +38,15 @@ async function generateThumbnails() {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
 
+        // Hozzáadunk egy képet a thumbnailhez
+        const thumbImage = document.createElement('img');
+        thumbImage.src = image.src;
+        thumbImage.style.width = '100px';
+        thumbImage.style.height = '60px';
+        thumbImage.style.objectFit = 'cover'; // Kép megfelelő illeszkedése
+
+        thumb.appendChild(thumbImage);
+
         // Ha a thumb éppen aktív, jelöljük ki
         if (index === currentIndex) {
             thumb.classList.add('active');
@@ -47,6 +56,7 @@ async function generateThumbnails() {
         thumbnailsContainer.appendChild(thumb);
     }
 }
+
 
 function centerThumbnail(index) {
     const thumbnails = document.querySelectorAll('#thumbnails img');
