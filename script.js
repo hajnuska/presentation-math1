@@ -1,8 +1,5 @@
 console.log("A script.js fájl sikeresen betöltődött.");
 
-// Tesztkép URL-je
-const testImageUrl = 'https://via.placeholder.com/150';
-
 // Elementek lekérése
 const currentImage = document.getElementById('currentImage');
 const thumbnailsContainer = document.getElementById('thumbnails');
@@ -21,9 +18,6 @@ let isPaused = false;
 let isSpeaking = false; // Azt jelzi, hogy a szöveg felolvasása folyamatban van
 let currentUtterance = null; // Aktuális felolvasás tárolása
 let speechSpeed = 1.0; // Alapértelmezett sebesség
-
-// Tesztkép beállítása
-currentImage.src = testImageUrl;
 
 // CSV fájl betöltése
 async function fetchCSV() {
@@ -74,6 +68,7 @@ async function generatePDFThumbnail(pdfUrl, pageNumber) {
 
     return canvas.toDataURL(); // Visszaadja a canvas mintadat URL-t
 }
+
 function centerThumbnail(index) {
     const thumbnails = document.querySelectorAll('#thumbnails img');
     const thumbnailWidth = thumbnails[0].clientWidth;
@@ -86,8 +81,7 @@ function centerThumbnail(index) {
 
 function showSlide(index) {
     currentIndex = index;
-    // Tesztkép URL-jét használjuk
-    currentImage.src = testImageUrl;
+    currentImage.src = images[currentIndex].src; // Az aktuális kép URL-jét használjuk
     updateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
