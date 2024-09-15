@@ -34,14 +34,11 @@ async function fetchCSV() {
 
 async function generateThumbnails() {
     thumbnailsContainer.innerHTML = '';
-
     for (const [index, image] of images.entries()) {
         const thumb = document.createElement('img');
         thumb.src = await generatePDFThumbnail(image.src, 1);
         thumb.dataset.index = index;
-        thumb.addEventListener('click', () => {
-            handleNavigation(index);
-        });
+        thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
     }
 }
@@ -50,20 +47,16 @@ async function generatePDFThumbnail(pdfUrl, pageNumber) {
     const loadingTask = pdfjsLib.getDocument(pdfUrl);
     const pdf = await loadingTask.promise;
     const page = await pdf.getPage(pageNumber);
-
     const scale = 0.2;
     const viewport = page.getViewport({ scale });
-
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     canvas.width = viewport.width;
     canvas.height = viewport.height;
-
     await page.render({
         canvasContext: context,
         viewport: viewport
     }).promise;
-
     return canvas.toDataURL();
 }
 
@@ -72,14 +65,13 @@ function centerThumbnail(index) {
     const thumbnailWidth = thumbnails[0].clientWidth;
     const thumbnailsWidth = thumbnailsContainer.clientWidth;
     const thumbnailPosition = thumbnails[index].offsetLeft;
-
     thumbnailsContainer.scrollLeft = thumbnailPosition - (thumbnailsWidth / 2) + (thumbnailWidth / 2);
 }
 
 function showSlide(index) {
     currentIndex = index;
     currentImage.src = images[currentIndex].src;
-    generateThumbnails(); // Update thumbnails when the slide changes
+    generateThumbnails();
     if (!isPaused) {
         speakText(images[currentIndex].text);
     }
@@ -89,25 +81,20 @@ async function speakText(text) {
     if (isSpeaking && currentUtterance) {
         speechSynthesis.cancel();
     }
-
     const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
     utterance.lang = 'hu-HU';
     utterance.rate = speechSpeed;
-
     const voices = await getVoice();
     const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
-
     if (maleVoice) {
         utterance.voice = maleVoice;
     }
-
     utterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
             nextSlide();
         }
     };
-
     speechSynthesis.speak(utterance);
     currentUtterance = utterance;
     isSpeaking = true;
@@ -147,7 +134,6 @@ function togglePause() {
     isPaused = !isPaused;
     pauseButton.style.display = isPaused ? 'none' : 'inline-block';
     resumeButton.style.display = isPaused ? 'inline-block' : 'none';
-
     if (isPaused) {
         speechSynthesis.pause();
     } else {
