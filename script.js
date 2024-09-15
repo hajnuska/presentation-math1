@@ -196,6 +196,44 @@ homeButton.addEventListener('click', () => {
     }
     window.location.href = 'index.html';
 });
+// Hangsebesség inicializálása
+let speechSpeed = 1;
 
+// Sebesség csúszka figyelése
+const speedControl = document.getElementById('speedControl');
+const speedValueDisplay = document.getElementById('speedValue');
+
+speedControl.addEventListener('input', () => {
+    speechSpeed = parseFloat(speedControl.value);
+    speedValueDisplay.textContent = `${speechSpeed}x`;
+});
+
+async function speakText(text) {
+    if (isSpeaking && currentUtterance) {
+        speechSynthesis.cancel(); // Megakadályozzuk a szöveg további felolvasását
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, '')); // eltávolítjuk a HTML tageket
+    utterance.lang = 'hu-HU';
+    utterance.rate = speechSpeed; // Alkalmazzuk a kiválasztott sebességet
+
+    const voices = await getVoice();
+    const maleVoice = voices.find(voice => voice.lang === 'hu-HU' && voice.name.toLowerCase().includes('male'));
+
+    if (maleVoice) {
+        utterance.voice = maleVoice; // Férfi hang kiválasztása
+    }
+
+    utterance.onend = () => {
+        isSpeaking = false; // Szöveg befejeződött
+        if (!isPaused) {
+            nextSlide(); // Amint végez a felolvasással, automatikusan megy a következőre
+        }
+    };
+
+    isSpeaking = true;
+    currentUtterance = utterance;
+    speechSynthesis.speak(utterance);
+}
 // Induláskor az első kép megjelenítése
 document.addEventListener('DOMContentLoaded', fetchCSV);
