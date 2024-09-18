@@ -1,0 +1,62 @@
+index,scr,text
+1,imageOK1.pdf,Szöveges feladat () arányosítással () részletes feladatmegoldás
+2,imageOK2.pdf,mielőtt elkezdjük a feladatmegoldást () érdemes előkészíteni néhány színes ceruzát () mert sokkal jobban átlátható lesz a feladat ()ha ezekkel emeljük ki az adatokat ()persze ez nem kötelező () akkor sincs baj () ha nincs színesünk ()vagy egyszerűen csak nem szeretünk színekkel dolgozni ()ez esetben elegendő lesz az aláhúzás is
+3,imageOK3.pdf,"amíg hozod a ceruzákat () állístd meg a videót a póz gommbal () ha itt vagy újra, akkor a pléj gombbal tudod újra elindítani a lejátszást"
+4,imageOK4.pdf,Én fő kiemelőszínként egy türkiszes árnyalatot fogok használni () Olvassuk el a feladatot () és közben már húzzuk is alá az adatokat () A nekeresdi gimnázium 9. b osztályában ()
+5,imageOK5.pdf,"a tanulók negyede bejáró,"
+6,imageOK6.pdf,harmadrésze kollégista
+7,imageOK7.pdf,15-en pedig Nekeresden laknak ()tehát nem bejárók és nem kollégisták () Nézzük meg a kérdésekben ezek közül milyen adatokra lesz szükség.
+8,imageOK8.pdf,AA kérdés () az osztály hányad részét alkotják ()a bejárók és kollégisták összesen ()
+9,imageOK9.pdf,"Tehát itt az osztály tanuulóinak létszámára lesz szükségünk, illetve a bejárók számára () és a kollégisták számára ()"
+10,imageOK10.pdf,"Bé kérdésben kollégisták, bejárók"
+11,imageOK11.pdf,"A Cé kérdésben pedig csak az osztálylétszám lesz kérdéses ()tehát ugyanazokkal a tényezőkkel kell dolgoznunk, úgyhogy ugorjunk is neki az AA kérdés megoldásának ()Kezdjük azzal, hogy kiírjuk a feladat szövegéból az adatokat"
+12,imageOK12.pdf,a tanulók létszámát ugyan nem tudjuk. ()de az látható. ()hogy több adatot is ez alapján határoztak meg. ()ezért nevezzük el: iksznek ()Az első konkrétabb adatunk. () hogy a tanulók negyede bejárós
+13,imageOK13.pdf,ezt vajon hogyan irjuk ()fel mivel az osztálylétszámot iksszel jelöltük 
+14,imageOK14.pdf,így ezzel már könnyen felírhatjuk a bejárók számára vonatkozó művceletet () az ikszet kell elosztanunk néggyel () tehát leírjuk () hogy iksz per négy ()Tudjuk azt is. ()hogy a tanulók harmadrésze kollégista
+15,imageOK15.pdf,"gondolkozzunk az előzőekhez hasonlóan () vagyis, hogy ha az osztálylétszámot iksszel jelöltük"
+16,imageOK16.pdf,akkor azt kell elosztanunk hárommal () tehát leírjuk () hogy iksz per három.
+17,imageOK17.pdf,Azt pedig konkrétan tudjuk () hogy 15-en pedig laknak.() Ezt egyszerűen 15-nek írjuk () Ha jól figyeltünk. ()látjuk. ()hogy az osztályba járó valamennyi gyermek elhelyezését megadták. ()hiszen vannk aki messze laknak. ()ők a bejárók. ()mások az iskola kollégiumában kaptak szállást () ők a kollégisták ()és vannak. akik olyan szerencsések. ()hogy helyi lakosok ()vagyis Nekeresden laknak.
+18,imageOK18.pdf,Így hát nem kell mást tennünk ()minthogy összeadjuk az egyes csoportokba sorolt tanulók számát () ennek összege lesz egyenlő az osztály létszámával. () vagyis iksszel.
+19,imageOK19.pdf,"Vagyis iksz egyenlő () iksz per4 ()meg iksz per három ()meg tizenöt ()Tehát felírtunk egy egyismeretlenes egyenletet. () De hogyan tovább? () vajon. mi legyen az első lépés? () Esetleg van olyan. rész, ami nehézséget okozhat?"
+20,imageOK20.pdf,"Nekem leginkább a törtes alakok szúrtak szemet () főképp azért, mert különböző a nevezőjük. ()Ha a nevezők nem egyeznek. ()akkor egy olyan számot kell talánunk. ()ami mindegyik nevezővel összehangolható. ()vagyis közös nevezőre kell hoznunk őket."
+21,imageOK21.pdf,Hogyan csináljuk ezt? ()Fontos hogy egy törtnek a számlálóját és nevezőjét is () ugyanazzal a számmal kell majd megszoroznunk () hogy a tört értéke ne változzon.
+22,imageOK22.pdf,Figyeljük meg. ()hogy a 4-nek és a 3-nak ()az 1-en kívül ()nincs közös osztója ()így a közös nevezőjük könnyen kiszámolható. ()mert elegendő. ()ha egyszerűen csak összeszorozzuk őket
+23,imageOK23.pdf,"Itt a közös nevező tehát () a 4 és a 3 szorzata lesz () vagyis 12. () Mivel a nevezőkben lévő számokat csak össze kellett szoroznunk. így elővehetünk egy szuper trükköt, amivel felgyorsíthatjuk a számolási folyamatot"
+24,imageOK24.pdf,"Ez nem más, mint a pillangó szorzás, ami segít megmutatni () hogy mit mivel kell szorozni () nézzük egyesével"
+25,imageOK25.pdf,"Az első tört számlálóját ()a második tört nevezőjével kell megszorozni ()tehát iksz szorozva 3-mal, az eredményünk: 3x lesz"
+26,imageOK26.pdf,"a második tört számlálóját pedig () Az első tört nevezőjével szorozzuk ()tehát iksz szorozva 4-gyel, ennek az eredménye pedig 4x lesz"
+27,imageOK27.pdf,a közös nevező pedig() ahogy azt már korábban kiszámoltuk () 12 lesz
+28,imageOK28.pdf,"A megkapott értékeket leírjuk a közös törtvonal fölé, de figyeljünk meg, pozitív vagy negatív volt a törtek között eredetileg a műveleti jel, és ugyanazt használjuk itt is"
+29,imageOK29.pdf,"Három iksz meg négy iksz. lesznek tehát a számlálóba került elemek, ()ezek mind ikszes tagok, vagyis egyneműek () így ezeket össze tudom vonni ha eddig még nem tettem meg"
+30,imageOK30.pdf,ezután már könnyű dolgom van () egy egyszerű szorzással el tudom tüntetni a törtet () tehát mindkét oldal minden tagját megszorzom 12-vel
+31,imageOK31.pdf,"Én szeretek a nehezebb számolásokon túl lenni, ezért először megszorzom a 15-t 12-vel, így ott 180-at kapok"
+32,imageOK32.pdf,"A bal oldalon csak egy ikszem van, így annak a szorzott értéke 12 iksz lesz, a jobb oldalon pedig a törtből eltűnik a nevező, és simán a 7x marad meg, ehhez adjuk majd hozzá a 180-at"
+33,imageOK33.pdf,"írjuk tehát le, hogy 12 iksz egyenlő 7 iksz meg száznyolcvannal () Most vonjunk ki 7X-et mindkét oldalból"
+34,imageOK34.pdf,Így 1-1 oldalon csak 1-féle elem marad. ()Bal oldalt látjuk az ikszes tagot. jobb oldalt pedig a tiszta számot. vagyis 5 iksz egyenlő száznyolcvannal. Már csak egy dolgot kell tennünk. hogy megkapjuk az iksz értékét. () Mindkét oldalt elosztjuk 5-tel ()
+35,imageOK35.pdf,Így megkaptuk iksz értékét.() ami az osztály tanulóinak számát mutatja ()iksz egyenlő 36 ()vagyis az osztály létszáma 36()
+36,imageOK36.pdf,"Ebből már ki tudjuk majd számolni a bejárók és a kollégisták számát, ()de előtte még ellenőrizzük le az erdedményt, hogy jól számoltunk-e. ()ehhez Keressük vissza az egyenletet."
+37,imageOK37.pdf,Iksz egyenlő iksz per négy meg iksz per három meg tizenöttel () most helyettesítsük be a harminchatot az ikszek helyére
+38,imageOK38.pdf,Így néz ki behelyettesítve. () Végezzük el a számítást
+39,imageOK39.pdf,"Így néz ki behelyettesítve. () Végezzük el a számítást () harminchatban a négy az kilenc és harminchatban a három az tizenkettő () kilenc meg tizenkettő az huszonegy () és ha ehhez hozzáadjuk a tizenötöt, akkor harminchatot kapunk"
+40,imageOK40.pdf,Ha a számolás végén () a két oldalon azonos szám jön ki. ()akkor jól számoltunk. ()És igen 36 egyenlő 36-tal.() Most hogy megvan az osztálylétszám () könnyedén ki tudjuk számolni a bejárók és kollégisták számát () nézzük meg a felírt adatainkat
+41,imageOK41.pdf,"Mostmár tudjuk, hogy az osztály létszáma 36 () így könnyedén ki tudjuk számolni a bejárók és kollégisták számát"
+42,imageOK42.pdf,"Helyettesítsük be a bejárók törtalakjába az összlétszámot, majd végezzük el az osztást ()harminchatban a négy egyenlő kilenccel"
+43,imageOK43.pdf,"Jegyezzük fel a bejárókhoz, hogy kilenc () Most helyettesítsük be a kollégisták törtalakjába is az összlétszámot, és végezzük el az osztást ()harminchatban a három az tizenkettő"
+44,imageOK44.pdf,"Írjuk fel ezt is az adataink közé, tehát a kollégisták száma tizenkettő (nézzük meg a kérdést újra)"
+45,imageOK45.pdf,Az osztály hányad részét alkotják a bejárók és a kollégisták összesen
+46,imageOK46.pdf,Itt fontos adatok lesznek () a hányad részét () és az összesen () mert a műveletekre utalnak ()
+47,imageOK47.pdf,"Láthatjuk, hogy minden alapadatunk megvan, írjuk fel a műveleteket"
+48,imageOK48.pdf,Először adjuk össze a bejárók és kollégisták számát () kilenc meg tizenkettő
+49,imageOK49.pdf,Ha jól számoltunk akkor huszonegyet kaptunk () most osszuk el a kapott számot az osztály létszámával () vagyis huszonegy osztva harminchattal ()meg is van az arányszámunk () de ha észrevesszük hogy () a huszonegy és a harminchat is osztható hárommal () akkor egyszerűsítsünk
+50,imageOK50.pdf,Osszuk el a számlálót és a nevezőt is hárommal () így a tört értéke nem változik viszont egy sokkal könnyebben érthető számot kapunk () tehát huszonegy hatod az egyenlő 7 tizenketteddel
+51,imageOK51.pdf,Itt jó válasz lehet tehát a huszonegy harminchatod vagy akár a hét tizenketted is () nézzük a következő kérdést
+52,imageOK52.pdf,Bé kérdés () Mennyi a kollégisták és a bejárók számának az aránya?
+53,imageOK53.pdf,itt fontos kifejezés az aránya () mert megmutatja() hogy milyen művelettel kell dolgoznunk
+54,imageOK54.pdf,Nézzük az adatokat és írjuk fel a műveletet () a művelet felírásánál figyeljünk a sorrendre
+55,imageOK55.pdf,"A kollégisták számát osztjuk el a bejárók számával () eredményül azt kapjuk, hogy a kollégisták száma úgy aránylik a bejárók számához, mint 12 a kilechez"
+56,imageOK56.pdf,Itt a válaszunk tehát az lesz () hogy 12 aránylik a kilenchez
+57,imageOK57.pdf,Cé kérdés: Hány tanulója van a nekeresdi gimnázium 9. Bé osztályának? () Nézzük az adatokat
+58,imageOK58.pdf,"Erre már tudjuk a választ, hiszen ezt számoltuk ki legelsőként"
+59,imageOK59.pdf,"A válaszunk tehát 36 () Nézzük meg mégegyszer az összes kérdést, hogy minden válaszunk meg van-e?"
+60,imageOK60.pdf,Az AA kérdésre válaszaink lehetnek () a 21 harminchatod vagy a 7 tizenketted () a Bé kérdésre válaszaink lehetnek a 12 kilenced vagy a 4 harmad () a Cé kérdésre pedig a 36 lesz a válaszunk
+61,imageOK61.pdf,"Ha maradt még kérdésed() keress bátran. ()Köszönöm, hogy velem tartottál."
