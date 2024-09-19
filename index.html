@@ -12,14 +12,22 @@
             padding: 0;
             overflow: hidden;
         }
-        #slideshow {
-            text-align: center;
-        }
-        .image-container img {
-            width: 85vw;
-            max-width: 1000px;
-            height: auto;
-        }
+       #slideshow {
+    text-align: center;
+}
+
+.image-container img {
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+}
+
+@media (min-width: 1001px) {
+    .image-container img {
+        width: 85vw;
+        max-width: none; /* Erre azért van szükség, hogy a 85%-os szélességet biztosítsuk nagyobb képernyőkön */
+    }
+}
         .thumbnails-wrapper {
             width: 85vw;
             overflow-x: auto;
