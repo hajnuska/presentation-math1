@@ -70,7 +70,7 @@ async function showSlide(index) {
         try {
             const loadingTask = pdfjsLib.getDocument(pdfUrl);
             const pdf = await loadingTask.promise;
-            const pageIndex = 1;
+            const pageIndex = 1; // Here you can set the page number you want to render
             if (pageIndex <= pdf.numPages) {
                 const page = await pdf.getPage(pageIndex);
                 const scale = 1.5;
@@ -86,7 +86,7 @@ async function showSlide(index) {
                     viewport: viewport
                 };
                 await page.render(renderContext).promise;
-                currentImage.src = canvas.toDataURL();
+                currentImage.src = canvas.toDataURL(); // Convert canvas to image data URL
                 updateThumbnailSelection();
                 if (pdfText && !isSpeaking) {
                     await speakText(pdfText);
