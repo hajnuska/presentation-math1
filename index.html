@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MATEK - arányosítás</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,22 +11,20 @@
             padding: 0;
             overflow: hidden;
         }
-       #slideshow {
-    text-align: center;
-}
-
-.image-container img {
-    width: 100%;
-    max-width: 1000px;
-    height: auto;
-}
-
-@media (min-width: 1001px) {
-    .image-container img {
-        width: 85vw;
-        max-width: none; /* Erre azért van szükség, hogy a 85%-os szélességet biztosítsuk nagyobb képernyőkön */
-    }
-}
+        #slideshow {
+            text-align: center;
+        }
+        .image-container img {
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+        }
+        @media (min-width: 1001px) {
+            .image-container img {
+                width: 85vw;
+                max-width: none; /* Erre azért van szükség, hogy a 85%-os szélességet biztosítsuk nagyobb képernyőkön */
+            }
+        }
         .thumbnails-wrapper {
             width: 85vw;
             overflow-x: auto;
