@@ -22,47 +22,12 @@
         @media (min-width: 1001px) {
             .image-container img {
                 width: 85vw;
-                max-width: none; /* Erre azért van szükség, hogy a 85%-os szélességet biztosítsuk nagyobb képernyőkön */
+                max-width: none;
             }
         }
-        .thumbnails-wrapper {
-            width: 85vw;
-            overflow-x: auto;
-            margin: 0 auto;
-            white-space: nowrap;
-            background-color: #f0f0f0;
+        .controls {
+            margin-top: 10px;
         }
-        .thumbnails {
-    display: flex; /* Ezzel egymás mellett lesznek a thumbnail-ek */
-    align-items: center; /* Középre igazítás függőlegesen */
-    margin-top: 10px; /* Felső margó */
-}
-.thumbnails div {
-    width: 60px; /* 6/5 arány szerint */
-    height: 50px; /* 6/5 arány szerint */
-    background-color: #f0f0f0;
-    margin: 0 5px;
-    cursor: pointer;
-    border-radius: 5px;
-    position: relative;
-    transition: transform 0.2s; /* Zökkenőmentes átmenet a méretváltozáskor */
-}
-
-.thumbnails div.active {
-    transform: scale(1.2); /* Méret növelés kiemelt állapotban */
-}
-
-.thumbnails div.active::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 10px;
-    background-color: black;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    border-radius: 0 0 5px 5px;
-}
         .custom-dropdown select {
             padding: 10px;
             font-size: 16px;
@@ -89,10 +54,6 @@
             transform: scale(1.1);
             font-weight: bold;
         }
-        .small-text {
-            font-size: 0.8em;
-            font-weight: normal;
-        }
     </style>
 </head>
 <body>
@@ -100,29 +61,9 @@
         <div class="image-container">
             <img id="currentImage" src="" alt="Slideshow Image">
         </div>
-        <!-- <div class="thumbnails-wrapper">
-            <div class="thumbnails" id="thumbnails">
-                <!-- Thumbnails will be inserted here -->
-            </div>
-        </div>-->
-        <div class="controls">
-            <label for="speedControl">Speed Control:</label>
-            <div class="custom-dropdown" style="display: inline-block; margin-left: 10px;">
-                <select id="speedControl">
-                    <option value="0.2">0.25x</option>
-                    <option value="0.4">0.5x</option>
-                    <option value="0.6">0.75x</option>
-                    <option value="0.8" selected>1x</option>
-                    <option value="1">1.25x</option>
-                    <option value="1.2">1.5x</option>
-                    <option value="1.3">1.75x</option>
-                    <option value="1.4">2x</option>
-                </select>
-            </div> 
-        </div>
         <label for="voiceSelect">Choose Voice:</label>
-<select id="voiceSelect"></select>
-<div class="controls">
+        <select id="voiceSelect"></select>
+        <div class="controls">
             <button id="previousImage">Previous</button>
             <button id="nextImage">Next</button>
             <button id="pause">Pause</button>
