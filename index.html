@@ -38,6 +38,25 @@
             appearance: none;
             outline: none;
         }
+        .thumbnail {
+    width: 100px;
+    height: 70px;
+    background-color: #ccc;
+    border-radius: 10px;
+    margin: 0 10px;
+    transition: transform 0.3s ease, border-bottom 0.3s ease;
+}
+
+.thumbnail:hover,
+.thumbnail.active {
+    transform: scale(1.1); /* Nagyítás hover és aktív állapotban */
+    cursor: pointer;
+}
+
+.thumbnail.selected {
+    border-bottom: 10px solid black;
+    transform: scale(1.15); /* Kiemelt thumbnail nagyobb lesz */
+}
         button {
             border: none;
             border-radius: 15px;
@@ -61,7 +80,10 @@
         <div class="image-container">
             <img id="currentImage" src="" alt="Slideshow Image">
         </div>
-        <label for="voiceSelect">Choose Voice:</label>
+        <div id="thumbnails">
+    <!-- Thumbnails itt jelennek meg -->
+</div>
+<label for="voiceSelect">Choose Voice:</label>
         <select id="voiceSelect"></select>
         <div class="controls">
             <button id="previousImage">Previous</button>
