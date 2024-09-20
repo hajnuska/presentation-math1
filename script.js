@@ -10,14 +10,13 @@ const resetButton = document.getElementById('reset');
 const nextButton = document.getElementById('nextImage');
 const previousButton = document.getElementById('previousImage');
 const homeButton = document.getElementById('home');
-const speedControl = document.getElementById('speedControl');
+const voiceSelect = document.getElementById('voiceSelect');
 
 let images = [];
 let currentIndex = 0;
 let isPaused = false;
 let isSpeaking = false;
 let currentUtterance = null;
-let speechSpeed = 1.0;
 
 // Fetch CSV data and initialize the slideshow
 async function fetchCSV() {
@@ -32,9 +31,21 @@ async function fetchCSV() {
         console.log("Images:", images);
         generateThumbnails();
         showSlide(currentIndex);
+        populateVoiceList(); // Hangok betöltése
     } catch (error) {
         console.error("Hiba a CSV betöltésekor:", error);
     }
+}
+
+// Populate the voice select dropdown
+function populateVoiceList() {
+    const voices = speechSynthesis.getVoices();
+    voices.forEach(voice => {
+        const option = document.createElement('option');
+        option.value = voice.name;
+        option.textContent = voice.name;
+        voiceSelect.appendChild(option);
+    });
 }
 
 // Generate thumbnails for navigation
@@ -44,8 +55,8 @@ function generateThumbnails() {
         const thumb = document.createElement('div');
         thumb.dataset.index = index;
         thumb.style.backgroundColor = 'lightgray';
-        thumb.style.width = '30px';
-        thumb.style.height = '60px';
+        thumb.style.width = '60px';
+        thumb.style.height = '50px';
         thumb.style.cursor = 'pointer';
         thumb.addEventListener('click', () => handleNavigation(index));
         thumbnailsContainer.appendChild(thumb);
@@ -58,11 +69,7 @@ function updateThumbnailSelection() {
     const thumbnails = document.querySelectorAll('#thumbnails div');
     thumbnails.forEach((thumb, idx) => {
         thumb.classList.toggle('active', idx === currentIndex);
-        if (idx === currentIndex) {
-            thumb.style.transform = 'scale(1.2)'; // Kiemelt thumbnail méretének növelése
-        } else {
-            thumb.style.transform = 'scale(1)'; // Alapértelmezett méret
-        }
+        thumb.style.transform = idx === currentIndex ? 'scale(1.2)' : 'scale(1)';
     });
 }
 
@@ -91,7 +98,7 @@ async function showSlide(index) {
                     viewport: viewport
                 };
                 await page.render(renderContext).promise;
-                currentImage.src = canvas.toDataURL(); // Convert canvas to image data URL
+                currentImage.src = canvas.toDataURL();
                 updateThumbnailSelection();
                 if (pdfText && !isSpeaking) {
                     await speakText(pdfText);
@@ -115,12 +122,11 @@ async function speakText(text) {
 
     currentUtterance = new SpeechSynthesisUtterance(text);
     currentUtterance.lang = 'hu-HU';
-    currentUtterance.rate = speechSpeed;
-    
-    const voices = speechSynthesis.getVoices();
-    currentUtterance.voice = voices.find(voice => voice.name === 'Google Hungarian'); // Válassz ki egy másik hangot
 
-// Wait for the speech to finish before proceeding
+    const selectedVoice = voiceSelect.value;
+    const voices = speechSynthesis.getVoices();
+    currentUtterance.voice = voices.find(voice => voice.name === selectedVoice);
+
     currentUtterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
@@ -133,7 +139,6 @@ async function speakText(text) {
         isSpeaking = false;
     };
 
-    // Speak the text
     speechSynthesis.speak(currentUtterance);
     isSpeaking = true;
 }
@@ -142,13 +147,12 @@ async function speakText(text) {
 function handleNavigation(index) {
     if (index >= 0 && index < images.length) {
         showSlide(index);
-
-        // Görgetés a kiválasztott thumbnailhoz
         const thumbnails = document.querySelectorAll('#thumbnails div');
         const activeThumbnail = thumbnails[index];
-        activeThumbnail.scrollIntoView({ behavior: 'smooth', inline: 'center' }); // Középre igazítás
+        activeThumbnail.scrollIntoView({ behavior: 'smooth', inline: 'center' });
     }
 }
+
 // Move to the next slide after the speech ends
 function nextSlide() {
     if (currentIndex < images.length - 1) {
@@ -160,14 +164,6 @@ function nextSlide() {
 function previousSlide() {
     if (currentIndex > 0) {
         showSlide(currentIndex - 1);
-    }
-}
-
-// Update speech rate from the speed control input
-function updateSpeed() {
-    speechSpeed = parseFloat(speedControl.value);
-    if (isSpeaking && currentUtterance) {
-        currentUtterance.rate = speechSpeed;
     }
 }
 
@@ -201,7 +197,6 @@ resetButton.addEventListener('click', () => {
 nextButton.addEventListener('click', nextSlide);
 previousButton.addEventListener('click', previousSlide);
 homeButton.addEventListener('click', () => showSlide(0));
-speedControl.addEventListener('change', updateSpeed);
 
 // Initialize the presentation
 fetchCSV();
