@@ -169,3 +169,8 @@ homeButton.addEventListener('click', () => showSlide(0));
 
 // Initialize the presentation
 fetchCSV();
+
+// Re-populate voice list when voices are loaded
+if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+}
