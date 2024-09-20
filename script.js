@@ -142,9 +142,13 @@ async function speakText(text) {
 function handleNavigation(index) {
     if (index >= 0 && index < images.length) {
         showSlide(index);
+
+        // Görgetés a kiválasztott thumbnailhoz
+        const thumbnails = document.querySelectorAll('#thumbnails div');
+        const activeThumbnail = thumbnails[index];
+        activeThumbnail.scrollIntoView({ behavior: 'smooth', inline: 'center' }); // Középre igazítás
     }
 }
-
 // Move to the next slide after the speech ends
 function nextSlide() {
     if (currentIndex < images.length - 1) {
