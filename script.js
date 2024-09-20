@@ -17,6 +17,7 @@ let currentIndex = 0;
 let isPaused = false;
 let isSpeaking = false;
 let currentUtterance = null;
+let thumbnails = []; // Thumbnail elemek eltárolása
 
 if (typeof speechSynthesis !== 'undefined') {
     speechSynthesis.onvoiceschanged = populateVoiceList;
@@ -35,6 +36,7 @@ async function fetchCSV() {
         console.log("Images:", images);
         populateVoiceList(); // Hangok betöltése
         showSlide(currentIndex);
+        generateThumbnails(); // Thumbnail-ek generálása
     } catch (error) {
         console.error("Hiba a CSV betöltésekor:", error);
     }
@@ -43,26 +45,53 @@ async function fetchCSV() {
 // Populate the voice select dropdown
 function populateVoiceList() {
     let voices = speechSynthesis.getVoices();
-
-    // Csak a magyar nyelvű hangok kiválasztása
     let hungarianVoices = voices.filter(voice => voice.lang === 'hu-HU');
 
-    // Ellenőrizzük, hogy legalább 5 magyar hang van-e
     if (hungarianVoices.length >= 5) {
-        selectedVoices = hungarianVoices.slice(0, 5); // Az első 5 magyar hangot választjuk ki
+        selectedVoices = hungarianVoices.slice(0, 5);
     } else {
-        selectedVoices = hungarianVoices; // Ha kevesebb, akkor az elérhető összes magyar hangot használjuk
+        selectedVoices = hungarianVoices;
     }
 
-    voiceSelect.innerHTML = ''; // Legördülő lista törlése
-
-    // A hangok hozzáadása a legördülő menühöz
+    voiceSelect.innerHTML = '';
     selectedVoices.forEach(voice => {
         const option = document.createElement('option');
         option.value = voice.name;
         option.textContent = `${voice.name} (${voice.lang})`;
         voiceSelect.appendChild(option);
     });
+}
+
+// Generate thumbnails
+function generateThumbnails() {
+    const thumbnailContainer = document.getElementById('thumbnails');
+    thumbnailContainer.innerHTML = ''; // Töröljük a korábbi elemeket
+    images.forEach((image, index) => {
+        const thumbnail = document.createElement('div');
+        thumbnail.classList.add('thumbnail');
+        
+        // Thumbnail-re kattintás
+        thumbnail.addEventListener('click', () => {
+            setSelectedThumbnail(index);
+        });
+
+        thumbnailContainer.appendChild(thumbnail);
+        thumbnails.push(thumbnail);
+    });
+
+    // Alapértelmezett thumbnail kijelölése
+    setSelectedThumbnail(currentIndex);
+}
+
+// Kiválasztott thumbnail beállítása
+function setSelectedThumbnail(index) {
+    thumbnails.forEach(thumbnail => {
+        thumbnail.classList.remove('selected');
+        thumbnail.classList.remove('active');
+    });
+
+    thumbnails[index].classList.add('selected');
+    thumbnails[index].classList.add('active');
 }
 
 // Show the current slide and start speaking the text
@@ -188,8 +217,3 @@ homeButton.addEventListener('click', () => showSlide(0));
 
 // Initialize the presentation
 fetchCSV();
-
-// Re-populate voice list when voices are loaded
-if (typeof speechSynthesis !== 'undefined') {
-    speechSynthesis.onvoiceschanged = populateVoiceList;
-}
