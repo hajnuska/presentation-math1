@@ -44,11 +44,14 @@ async function fetchCSV() {
 function populateVoiceList() {
     let voices = speechSynthesis.getVoices();
 
-    // Ellenőrizzük, hogy legalább 5 hang van-e
-    if (voices.length >= 5) {
-        selectedVoices = voices.slice(0, 5); // Az első 5 hangot választjuk ki
+    // Csak a magyar nyelvű hangok kiválasztása
+    let hungarianVoices = voices.filter(voice => voice.lang === 'hu-HU');
+
+    // Ellenőrizzük, hogy legalább 5 magyar hang van-e
+    if (hungarianVoices.length >= 5) {
+        selectedVoices = hungarianVoices.slice(0, 5); // Az első 5 magyar hangot választjuk ki
     } else {
-        selectedVoices = voices; // Ha nincs 5 hang, az elérhető hangokat használjuk
+        selectedVoices = hungarianVoices; // Ha kevesebb, akkor az elérhető összes magyar hangot használjuk
     }
 
     voiceSelect.innerHTML = ''; // Legördülő lista törlése
