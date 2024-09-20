@@ -2,6 +2,7 @@ console.log("A script.js fájl sikeresen betöltődött.");
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
+let selectedVoices = [];
 const currentImage = document.getElementById('currentImage');
 const pauseButton = document.getElementById('pause');
 const resumeButton = document.getElementById('resume');
@@ -16,6 +17,10 @@ let currentIndex = 0;
 let isPaused = false;
 let isSpeaking = false;
 let currentUtterance = null;
+
+if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+}
 
 // Fetch CSV data and initialize the slideshow
 async function fetchCSV() {
@@ -37,11 +42,22 @@ async function fetchCSV() {
 
 // Populate the voice select dropdown
 function populateVoiceList() {
-    const voices = speechSynthesis.getVoices();
-    voices.forEach(voice => {
+    let voices = speechSynthesis.getVoices();
+
+    // Ellenőrizzük, hogy legalább 5 hang van-e
+    if (voices.length >= 5) {
+        selectedVoices = voices.slice(0, 5); // Az első 5 hangot választjuk ki
+    } else {
+        selectedVoices = voices; // Ha nincs 5 hang, az elérhető hangokat használjuk
+    }
+
+    voiceSelect.innerHTML = ''; // Legördülő lista törlése
+
+    // A hangok hozzáadása a legördülő menühöz
+    selectedVoices.forEach(voice => {
         const option = document.createElement('option');
         option.value = voice.name;
-        option.textContent = voice.name;
+        option.textContent = `${voice.name} (${voice.lang})`;
         voiceSelect.appendChild(option);
     });
 }
