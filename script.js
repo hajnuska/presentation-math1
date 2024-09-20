@@ -58,6 +58,11 @@ function updateThumbnailSelection() {
     const thumbnails = document.querySelectorAll('#thumbnails div');
     thumbnails.forEach((thumb, idx) => {
         thumb.classList.toggle('active', idx === currentIndex);
+        if (idx === currentIndex) {
+            thumb.style.transform = 'scale(1.2)'; // Kiemelt thumbnail méretének növelése
+        } else {
+            thumb.style.transform = 'scale(1)'; // Alapértelmezett méret
+        }
     });
 }
 
