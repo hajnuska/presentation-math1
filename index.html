@@ -32,7 +32,12 @@
             white-space: nowrap;
             background-color: #f0f0f0;
         }
-        .thumbnails div {
+        .thumbnails {
+    display: flex; /* Ezzel egymás mellett lesznek a thumbnail-ek */
+    align-items: center; /* Középre igazítás függőlegesen */
+    margin-top: 10px; /* Felső margó */
+}
+.thumbnails div {
     width: 60px; /* 6/5 arány szerint */
     height: 50px; /* 6/5 arány szerint */
     background-color: #f0f0f0;
