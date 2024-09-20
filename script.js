@@ -117,7 +117,10 @@ async function speakText(text) {
     currentUtterance.lang = 'hu-HU';
     currentUtterance.rate = speechSpeed;
     
-    // Wait for the speech to finish before proceeding
+    const voices = speechSynthesis.getVoices();
+    currentUtterance.voice = voices.find(voice => voice.name === 'Google Hungarian'); // Válassz ki egy másik hangot
+
+// Wait for the speech to finish before proceeding
     currentUtterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
