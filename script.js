@@ -3,7 +3,6 @@ console.log("A script.js fájl sikeresen betöltődött.");
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 const currentImage = document.getElementById('currentImage');
-const thumbnailsContainer = document.getElementById('thumbnails');
 const pauseButton = document.getElementById('pause');
 const resumeButton = document.getElementById('resume');
 const resetButton = document.getElementById('reset');
@@ -29,9 +28,8 @@ async function fetchCSV() {
             return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
         }).filter(image => image.index);
         console.log("Images:", images);
-        generateThumbnails();
-        showSlide(currentIndex);
         populateVoiceList(); // Hangok betöltése
+        showSlide(currentIndex);
     } catch (error) {
         console.error("Hiba a CSV betöltésekor:", error);
     }
@@ -48,31 +46,6 @@ function populateVoiceList() {
     });
 }
 
-// Generate thumbnails for navigation
-function generateThumbnails() {
-    thumbnailsContainer.innerHTML = '';
-    images.forEach((image, index) => {
-        const thumb = document.createElement('div');
-        thumb.dataset.index = index;
-        thumb.style.backgroundColor = 'lightgray';
-        thumb.style.width = '60px';
-        thumb.style.height = '50px';
-        thumb.style.cursor = 'pointer';
-        thumb.addEventListener('click', () => handleNavigation(index));
-        thumbnailsContainer.appendChild(thumb);
-    });
-    updateThumbnailSelection();
-}
-
-// Update the visual selection of the current thumbnail
-function updateThumbnailSelection() {
-    const thumbnails = document.querySelectorAll('#thumbnails div');
-    thumbnails.forEach((thumb, idx) => {
-        thumb.classList.toggle('active', idx === currentIndex);
-        thumb.style.transform = idx === currentIndex ? 'scale(1.2)' : 'scale(1)';
-    });
-}
-
 // Show the current slide and start speaking the text
 async function showSlide(index) {
     if (images[index]) {
@@ -82,7 +55,7 @@ async function showSlide(index) {
         try {
             const loadingTask = pdfjsLib.getDocument(pdfUrl);
             const pdf = await loadingTask.promise;
-            const pageIndex = 1; // Here you can set the page number you want to render
+            const pageIndex = 1; // Page number to render
             if (pageIndex <= pdf.numPages) {
                 const page = await pdf.getPage(pageIndex);
                 const scale = 1.5;
@@ -99,7 +72,6 @@ async function showSlide(index) {
                 };
                 await page.render(renderContext).promise;
                 currentImage.src = canvas.toDataURL();
-                updateThumbnailSelection();
                 if (pdfText && !isSpeaking) {
                     await speakText(pdfText);
                 }
@@ -147,9 +119,6 @@ async function speakText(text) {
 function handleNavigation(index) {
     if (index >= 0 && index < images.length) {
         showSlide(index);
-        const thumbnails = document.querySelectorAll('#thumbnails div');
-        const activeThumbnail = thumbnails[index];
-        activeThumbnail.scrollIntoView({ behavior: 'smooth', inline: 'center' });
     }
 }
 
