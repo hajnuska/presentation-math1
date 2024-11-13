@@ -134,86 +134,68 @@ async function showSlide(index) {
     }
 }
 
-// Speak the text and wait for the speech to end before moving to the next slide
+// Speak the text using the SpeechSynthesis API
 async function speakText(text) {
-    if (isSpeaking && currentUtterance) {
-        speechSynthesis.cancel();
-    }
-
-    currentUtterance = new SpeechSynthesisUtterance(text);
-    currentUtterance.lang = 'hu-HU';
-
-    const selectedVoice = voiceSelect.value;
-    const voices = speechSynthesis.getVoices();
-    currentUtterance.voice = voices.find(voice => voice.name === selectedVoice);
-
-    currentUtterance.onend = () => {
+    if (!text || isSpeaking) return;
+    isSpeaking = true;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = speechSynthesis.getVoices().find(voice => voice.name === voiceSelect.value);
+    speechSynthesis.speak(utterance);
+    utterance.onend = () => {
         isSpeaking = false;
         if (!isPaused) {
             nextSlide();
         }
     };
-    
-    currentUtterance.onerror = (event) => {
-        console.error("Speech synthesis error:", event.error);
-        isSpeaking = false;
-    };
-
-    speechSynthesis.speak(currentUtterance);
-    isSpeaking = true;
 }
 
-// Handle navigation between slides
-function handleNavigation(index) {
-    if (index >= 0 && index < images.length) {
-        showSlide(index);
-    }
-}
-
-// Move to the next slide after the speech ends
+// Go to the next slide
 function nextSlide() {
-    if (currentIndex < images.length - 1) {
-        showSlide(currentIndex + 1);
-    }
+    currentIndex = (currentIndex + 1) % images.length;
+    showSlide(currentIndex);
 }
 
-// Move to the previous slide
+// Go to the previous slide
 function previousSlide() {
-    if (currentIndex > 0) {
-        showSlide(currentIndex - 1);
-    }
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showSlide(currentIndex);
 }
 
-// Add event listeners to control buttons
-pauseButton.addEventListener('click', () => {
+// Pause the speech
+function pauseSpeech() {
     if (isSpeaking) {
         speechSynthesis.pause();
         isPaused = true;
+        resumeButton.style.display = 'inline-block';
         pauseButton.style.display = 'none';
-        resumeButton.style.display = 'inline';
     }
-});
+}
 
-resumeButton.addEventListener('click', () => {
-    if (isPaused) {
+// Resume the speech
+function resumeSpeech() {
+    if (isSpeaking) {
         speechSynthesis.resume();
         isPaused = false;
         resumeButton.style.display = 'none';
-        pauseButton.style.display = 'inline';
+        pauseButton.style.display = 'inline-block';
     }
-});
+}
 
-resetButton.addEventListener('click', () => {
-    showSlide(0);
-    if (isSpeaking) {
-        speechSynthesis.cancel();
-        isSpeaking = false;
-    }
-});
+// Reset the slideshow
+function resetSlideshow() {
+    currentIndex = 0;
+    showSlide(currentIndex);
+    isPaused = false;
+    resumeButton.style.display = 'none';
+    pauseButton.style.display = 'inline-block';
+}
 
+// Event listeners for buttons
 nextButton.addEventListener('click', nextSlide);
 previousButton.addEventListener('click', previousSlide);
-homeButton.addEventListener('click', () => showSlide(0));
+pauseButton.addEventListener('click', pauseSpeech);
+resumeButton.addEventListener('click', resumeSpeech);
+resetButton.addEventListener('click', resetSlideshow);
 
-// Initialize the presentation
+// Fetch CSV when page loads
 fetchCSV();
