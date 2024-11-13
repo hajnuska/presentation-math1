@@ -28,11 +28,15 @@ async function fetchCSV() {
     try {
         const response = await fetch('https://raw.githubusercontent.com/hajnuska/presentation-math1/main/data.csv');
         const text = await response.text();
-        const rows = text.split('\n').slice(1);
+        const rows = text.split('\n').slice(1);  // Töröljük az első sort (fejléc)
+        
+        // Képek URL generálása a fájlnév alapján
         images = rows.map(row => {
-            const [index, src, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
-            return { index: parseInt(index, 10), src: `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${src}`, text };
+            const [index, filename, text] = row.split(',').map(value => value ? value.trim().replace(/^"|"$/g, '') : '');
+            const imageURL = `https://raw.githubusercontent.com/hajnuska/presentation-math1/main/images/${filename}`;  // Kép URL generálása
+            return { index: parseInt(index, 10), src: imageURL, text };
         }).filter(image => image.index);
+
         console.log("Images:", images);
         populateVoiceList(); // Hangok betöltése
         showSlide(currentIndex);
@@ -98,36 +102,15 @@ function setSelectedThumbnail(index) {
 async function showSlide(index) {
     if (images[index]) {
         currentIndex = index;
-        const pdfUrl = images[currentIndex].src;
+        const imageURL = images[currentIndex].src;
         const pdfText = images[currentIndex].text;
-        try {
-            const loadingTask = pdfjsLib.getDocument(pdfUrl);
-            const pdf = await loadingTask.promise;
-            const pageIndex = 1; // Page number to render
-            if (pageIndex <= pdf.numPages) {
-                const page = await pdf.getPage(pageIndex);
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale });
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                document.querySelector('.image-container').innerHTML = '';
-                document.querySelector('.image-container').appendChild(canvas);
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                await page.render(renderContext).promise;
-                currentImage.src = canvas.toDataURL();
-                if (pdfText && !isSpeaking) {
-                    await speakText(pdfText);
-                }
-            } else {
-                console.error("A megadott oldal indexe nem létezik:", pageIndex);
-            }
-        } catch (error) {
-            console.error("Hiba a PDF betöltésekor:", error);
+
+        // Kép betöltése
+        currentImage.src = imageURL;
+
+        // Ha van szöveg, beszéltetés
+        if (pdfText && !isSpeaking) {
+            await speakText(pdfText);
         }
     } else {
         console.error("Nincs kép az indexen:", index);
